@@ -1,4 +1,5 @@
 ﻿using Journey.Application.Dtos;
+using Mapster;
 
 namespace Journey.Application.Journeys.Commands.CreateJourney;
 
@@ -17,14 +18,9 @@ public class CreateJourneyHandler(IApplicationDbContext dbContext)
 
     private JourneyEntity CreateNewJourney(JourneyDto journey)
     {
-        var newJourney = JourneyEntity.Create(
-            Guid.NewGuid(),
-            journey.StartLocation,
-            journey.StartTime,
-            journey.ArrivalLocation,
-            journey.ArrivalTime,
-            journey.TransportType,
-            journey.DistanceKm);
+        JourneyEntity newJourney = journey.Adapt<JourneyEntity>();
+
+        newJourney.Id = Guid.NewGuid();
 
         return newJourney;
     }

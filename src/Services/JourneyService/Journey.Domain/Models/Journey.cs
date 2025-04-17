@@ -32,7 +32,7 @@ public class Journey : Aggregate<Guid>
         return journey;
     }
 
-    public void Update(Guid id,
+    public void Update(
       string startLocation,
       DateTime startTime,
       string arrivalLocation,
