@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Journey.Infrastructure.Data;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Journey.Infrastructure;
@@ -12,9 +13,9 @@ public static class DependencyInjection
         var connectionString = configuration.GetConnectionString("Database");
 
         //add services to the container
-        //services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+        services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 
-        //services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
+        // services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
 
         return services;
     }

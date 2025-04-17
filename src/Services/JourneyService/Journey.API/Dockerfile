@@ -13,6 +13,10 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Services/JourneyService/Journey.API/Journey.API.csproj", "Services/JourneyService/Journey.API/"]
+COPY ["Journey.Infrastructure/Journey.Infrastructure.csproj", "Journey.Infrastructure/"]
+COPY ["Services/JourneyService/Journey.Application/Journey.Application.csproj", "Services/JourneyService/Journey.Application/"]
+COPY ["BuildingBlocks/BuildingBlocks/BuildingBlocks.csproj", "BuildingBlocks/BuildingBlocks/"]
+COPY ["Services/JourneyService/Journey.Domain/Journey.Domain.csproj", "Services/JourneyService/Journey.Domain/"]
 RUN dotnet restore "./Services/JourneyService/Journey.API/Journey.API.csproj"
 COPY . .
 WORKDIR "/src/Services/JourneyService/Journey.API"

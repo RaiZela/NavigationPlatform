@@ -1,0 +1,7 @@
+services:
+  journey.api:
+    image: ${DOCKER_REGISTRY-}journeyapi
+    build:
+      context: .
+      dockerfile: Services/JourneyService/Journey.API/Dockerfile
+
