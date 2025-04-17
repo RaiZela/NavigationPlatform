@@ -11,4 +11,13 @@
     <ProjectReference Include="..\Journey.Domain\Journey.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Journeys\EventHandlers\" />
+    <Folder Include="Journeys\Queries\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
+  </ItemGroup>
+
 </Project>
