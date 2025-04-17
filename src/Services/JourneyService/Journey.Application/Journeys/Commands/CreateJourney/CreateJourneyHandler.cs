@@ -1,13 +1,31 @@
-﻿using BuildingBlocks.CQRS;
-using Journey.Application.Journeys.Commands.CreateOrder;
+﻿using Journey.Application.Dtos;
 
 namespace Journey.Application.Journeys.Commands.CreateJourney;
 
-public class CreateJourneyHandler
+public class CreateJourneyHandler(IApplicationDbContext dbContext)
     : ICommandHandler<CreateJourneyCommand, CreateJourneyResult>
 {
-    public Task<CreateJourneyResult> Handle(CreateJourneyCommand request, CancellationToken cancellationToken)
+    public async Task<CreateJourneyResult> Handle(CreateJourneyCommand command, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var journey = CreateNewJourney(command.Journey);
+
+        dbContext.Journeys.Add(journey);
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        return new CreateJourneyResult(journey.Id);
+    }
+
+    private JourneyEntity CreateNewJourney(JourneyDto journey)
+    {
+        var newJourney = JourneyEntity.Create(
+            Guid.NewGuid(),
+            journey.StartLocation,
+            journey.StartTime,
+            journey.ArrivalLocation,
+            journey.ArrivalTime,
+            journey.TransportType,
+            journey.DistanceKm);
+
+        return newJourney;
     }
 }
