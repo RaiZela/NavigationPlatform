@@ -10,3 +10,6 @@ global using Journey.Application.Dtos;
 global using Journey.Application.Journeys.Commands.CreateOrder;
 global using Mapster;
 global using MediatR;
+global using Journey.Application.Journeys.Commands.DeleteJourney;
+global using Journey.Application.Journeys.Queries.GetJourney;
+global using BuildingBlocks.Pagination;

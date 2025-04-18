@@ -1,10 +1,4 @@
-﻿using Journey.Application.Data;
-using Journey.Infrastructure.Data;
-using Journey.Infrastructure.Data.Interceptors;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-
-namespace Journey.Infrastructure;
+﻿namespace Journey.Infrastructure;
 
 public static class DependencyInjection
 {
@@ -14,7 +8,6 @@ public static class DependencyInjection
     {
         var connectionString = configuration.GetConnectionString("Database");
 
-        //add services to the container
         services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
         services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
 

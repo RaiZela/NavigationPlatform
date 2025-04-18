@@ -11,3 +11,4 @@ global using MediatR;
 global using Microsoft.EntityFrameworkCore;
 global using Serilog;
 global using JourneyEntity = Journey.Domain.Models.Journey;
+global using Microsoft.Extensions.Logging;

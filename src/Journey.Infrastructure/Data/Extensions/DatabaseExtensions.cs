@@ -8,6 +8,6 @@ public static class DatabaseExtensions
 
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-        context.Database.MigrateAsync().GetAwaiter().GetResult();
+        await context.Database.MigrateAsync();
     }
 }

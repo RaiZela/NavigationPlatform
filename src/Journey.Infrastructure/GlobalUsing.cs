@@ -12,4 +12,7 @@ global using Microsoft.Extensions.DependencyInjection;
 global using System.Reflection;
 global using System.Security.Claims;
 global using JourneyEntity = Journey.Domain.Models.Journey;
+global using Journey.Infrastructure.Data;
+global using Journey.Infrastructure.Data.Interceptors;
+global using Microsoft.Extensions.Configuration;
 

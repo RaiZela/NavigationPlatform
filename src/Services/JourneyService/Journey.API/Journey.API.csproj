@@ -32,4 +32,8 @@
     <ProjectReference Include="..\Journey.Application\Journey.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Logs\" />
+  </ItemGroup>
+
 </Project>

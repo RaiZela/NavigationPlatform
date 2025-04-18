@@ -27,6 +27,8 @@ builder.Services.AddAuthentication("Bearer")
         options.Audience = "https://your-api";
     });
 
+builder.Services.AddAuthorization();
+
 var app = builder.Build();
 
 app.UseAuthentication();
@@ -35,6 +37,7 @@ app.UseAuthorization();
 app.UseApiServices();
 
 app.UseMiddleware<CorrelationIdMiddleware>();
+app.UseSerilogRequestLogging();
 
 if (app.Environment.IsDevelopment())
 {
