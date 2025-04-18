@@ -5,3 +5,8 @@ global using Journey.Infrastructure;
 global using Journey.Infrastructure.Data.Auth;
 global using Journey.Infrastructure.Data.Extensions;
 global using Serilog;
+global using Carter;
+global using Journey.Application.Dtos;
+global using Journey.Application.Journeys.Commands.CreateOrder;
+global using Mapster;
+global using MediatR;
