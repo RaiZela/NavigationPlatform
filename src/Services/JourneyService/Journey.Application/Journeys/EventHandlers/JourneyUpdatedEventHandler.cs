@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Journey.Application.Journeys.EventHandlers;
 
-namespace Journey.Application.Journeys.EventHandlers
+public class JourneyUpdatedEventHandle(ILogger logger)
+    : INotificationHandler<JourneyUpdatedEvent>
 {
-    class JourneyUpdatedEventHandler
+    public Task Handle(JourneyUpdatedEvent notification, CancellationToken cancellationToken)
     {
+        logger.Information("Domain Event Handled: {DomainEvent}", notification.GetType().Name);
+        return Task.CompletedTask;
     }
 }

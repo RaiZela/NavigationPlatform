@@ -1,11 +1,3 @@
-using BuildingBlocks.Middleware.Serilog;
-using Journey.API;
-using Journey.Application;
-using Journey.Infrastructure;
-using Journey.Infrastructure.Data.Auth;
-using Journey.Infrastructure.Data.Extensions;
-using Serilog;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHttpContextAccessor();
@@ -28,8 +20,17 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.Authority = "https://your-auth0-domain/";
+        options.Audience = "https://your-api";
+    });
 
 var app = builder.Build();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseApiServices();
 
