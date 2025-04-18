@@ -28,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Journey.Infrastructure\Journey.Infrastructure.csproj" />
     <ProjectReference Include="..\Journey.Application\Journey.Application.csproj" />
   </ItemGroup>
 
