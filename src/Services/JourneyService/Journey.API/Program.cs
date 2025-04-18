@@ -2,10 +2,15 @@ using BuildingBlocks.Middleware.Serilog;
 using Journey.API;
 using Journey.Application;
 using Journey.Infrastructure;
+using Journey.Infrastructure.Data.Auth;
 using Journey.Infrastructure.Data.Extensions;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
 
 //Add services to the container
 builder.Services.AddApplicationServices()
