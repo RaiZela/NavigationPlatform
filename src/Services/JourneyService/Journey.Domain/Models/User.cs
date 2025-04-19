@@ -6,5 +6,6 @@ public class User
     public string Auth0Id { get; set; }
     public string Email { get; set; }
     public string Role { get; set; }
+    public string Name { get; private set; }
     public virtual ICollection<Journey> CreatedJourneys { get; set; }
 }
