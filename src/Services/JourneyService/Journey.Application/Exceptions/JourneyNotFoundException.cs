@@ -2,7 +2,7 @@
 
 public class JourneyNotFoundException : NotFoundException
 {
-    public JourneyNotFoundException(Guid id) : base("Journey",id)
+    public JourneyNotFoundException(Guid? id) : base("Journey",id)
     {
         
     }

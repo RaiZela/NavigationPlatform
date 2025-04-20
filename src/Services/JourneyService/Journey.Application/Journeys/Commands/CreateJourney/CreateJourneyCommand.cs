@@ -1,8 +1,7 @@
 ﻿using BuildingBlocks.CQRS;
 using FluentValidation;
-using Journey.Application.Dtos;
 
-namespace Journey.Application.Journeys.Commands.CreateOrder;
+namespace Journey.Application.Journeys.Commands.CreateJourney;
 
 public record CreateJourneyCommand(JourneyDto Journey)
     : ICommand<CreateJourneyResult>;
@@ -20,7 +19,7 @@ public class CreateJourneyCommandValidator : AbstractValidator<CreateJourneyComm
         RuleFor(x => x.Journey.StartLocation).NotEmpty().NotNull().MinimumLength(2).MaximumLength(20)
             .WithMessage("Start location is required!");
 
-        RuleFor(x => x.Journey.DistanceKm.value).LessThan(1000).WithMessage("Distance location is required!");
+        RuleFor(x => x.Journey.DistanceKm.Value).LessThan(1000).WithMessage("Distance must be less than 1000!");
 
         RuleFor(x => x.Journey.StartTime).NotNull().NotEmpty().WithMessage("Start time is required!");
 

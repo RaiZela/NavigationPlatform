@@ -1,3 +1,8 @@
+using Journey.Infrastructure;
+using Journey.Infrastructure.Data.Auth;
+using Journey.Infrastructure.Data.Extensions;
+using System.Text.Json;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHttpContextAccessor();
@@ -20,19 +25,19 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
-builder.Services.AddAuthentication("Bearer")
-    .AddJwtBearer("Bearer", options =>
-    {
-        options.Authority = "https://your-auth0-domain/";
-        options.Audience = "https://your-api";
-    });
+//builder.Services.AddAuthentication("Bearer")
+//    .AddJwtBearer("Bearer", options =>
+//    {
+//        options.Authority = "https://your-auth0-domain/";
+//        options.Audience = "https://your-api";
+//    });
 
-builder.Services.AddAuthorization();
+//builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-app.UseAuthentication();
-app.UseAuthorization();
+//app.UseAuthentication();
+//app.UseAuthorization();
 
 app.UseApiServices();
 

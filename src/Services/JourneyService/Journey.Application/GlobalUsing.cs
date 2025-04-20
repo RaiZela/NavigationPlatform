@@ -3,7 +3,7 @@ global using BuildingBlocks.Exceptions;
 global using Journey.Application.Data;
 global using Journey.Application.Dtos;
 global using Journey.Application.Exceptions;
-global using Journey.Application.Journeys.Commands.CreateOrder;
+global using Journey.Application.Journeys.Commands.CreateJourney;
 global using Journey.Application.Journeys.Queries.GetJourney;
 global using Journey.Domain.Events;
 global using Mapster;

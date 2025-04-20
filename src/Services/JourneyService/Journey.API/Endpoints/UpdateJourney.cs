@@ -3,13 +3,8 @@ using Journey.Application.Journeys.Commands.UpdateJourney;
 
 namespace Journey.API.Endpoints
 {
-    //Accept a UpdateJourneyRequest object
-    //Maps the request to a UpdateOrderCommand
-    //Uses MediatR to send the command to the corresponding handler
-    //Returns a response with the created order's ID
-
     public record UpdateourneyRequest(JourneyDto Journey);
-    public record UpdateJourneyResponse(Guid Id);
+    public record UpdateJourneyResponse(bool isSuccess);
     public class UpdateJourney : ICarterModule
     {
         public void AddRoutes(IEndpointRouteBuilder app)
@@ -20,7 +15,7 @@ namespace Journey.API.Endpoints
 
                 var result = await sender.Send(command);
 
-                var response = result.Adapt<UpdateJourneyResponse>();
+                var response = new UpdateJourneyResponse(result.isSuccess); ;
 
                 return Results.Ok(response);
 

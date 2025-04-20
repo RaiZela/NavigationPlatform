@@ -1,5 +1,8 @@
-﻿namespace Journey.Domain.Enums;
+﻿using System.Text.Json.Serialization;
 
+namespace Journey.Domain.Enums;
+
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum TransportType
 {
     None = 0,

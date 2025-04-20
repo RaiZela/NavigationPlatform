@@ -13,7 +13,7 @@ public class JourneyConfigurations : IEntityTypeConfiguration<JourneyEntity>
 
         builder.Property(j => j.DistanceKm)
                  .HasConversion(
-                     v => v.value,
+                     v => v.Value,
                      v => new DistanceKM(v))
                  .HasPrecision(5, 2)
                  .HasColumnName("DistanceKm");

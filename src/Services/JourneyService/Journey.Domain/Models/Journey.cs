@@ -25,7 +25,7 @@ public class Journey : Aggregate<Guid>
             ArrivalLocation = arrivalLocation,
             ArrivalTime = arrivalTime,
             TransportType = transportType,
-            DistanceKm = distanceKM
+            DistanceKm = DistanceKM.Of(distanceKM.Value)
         };
 
         journey.AddDomainEvent(new JourneyCreatedEvent(journey));

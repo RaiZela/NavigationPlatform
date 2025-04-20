@@ -9,7 +9,7 @@ public class DeleteJourney : ICarterModule
         {
             var result = await sender.Send(new DeleteJourneyCommand(Id));
 
-            var response = result.Adapt<DeleteJourneyResponse>();
+            var response = new DeleteJourneyResponse(result.result);
 
             return Results.Ok(response);
         })

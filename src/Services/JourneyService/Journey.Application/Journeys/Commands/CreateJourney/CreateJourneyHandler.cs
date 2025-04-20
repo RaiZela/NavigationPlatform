@@ -8,12 +8,21 @@ public class CreateJourneyHandler(IApplicationDbContext dbContext)
 {
     public async Task<CreateJourneyResult> Handle(CreateJourneyCommand command, CancellationToken cancellationToken)
     {
-        var journey = CreateNewJourney(command.Journey);
+        try
+        {
+            var journey = CreateNewJourney(command.Journey);
 
-        dbContext.Journeys.Add(journey);
-        await dbContext.SaveChangesAsync(cancellationToken);
+            dbContext.Journeys.Add(journey);
+            await dbContext.SaveChangesAsync(cancellationToken);
 
-        return new CreateJourneyResult(journey.Id);
+            return new CreateJourneyResult(journey.Id);
+
+        }
+        catch (Exception ex)
+        {
+
+            throw;
+        }
     }
 
     private JourneyEntity CreateNewJourney(JourneyDto journey)

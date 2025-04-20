@@ -4,7 +4,7 @@ global using Journey.Application;
 global using Serilog;
 global using Carter;
 global using Journey.Application.Dtos;
-global using Journey.Application.Journeys.Commands.CreateOrder;
+global using Journey.Application.Journeys.Commands.CreateJourney;
 global using Mapster;
 global using MediatR;
 global using Journey.Application.Journeys.Commands.DeleteJourney;

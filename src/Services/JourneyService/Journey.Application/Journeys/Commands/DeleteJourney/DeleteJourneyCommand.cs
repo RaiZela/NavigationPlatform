@@ -6,7 +6,7 @@ public record DeleteJourneyCommand(Guid Id)
     : ICommand<DeleteJourneyResult>;
 
 
-public record DeleteJourneyResult(bool result);
+public record DeleteJourneyResult(bool isSuccess);
 
 public class DeleteJourneyCommandValidator : AbstractValidator<DeleteJourneyCommand>
 {

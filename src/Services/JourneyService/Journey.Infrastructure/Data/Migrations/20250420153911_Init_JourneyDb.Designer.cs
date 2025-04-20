@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Journey.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250417120254_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250420153911_Init_JourneyDb")]
+    partial class Init_JourneyDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,8 +41,8 @@ namespace Journey.Infrastructure.Data.Migrations
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("DistanceKm")
                         .HasPrecision(5, 2)
@@ -52,9 +52,8 @@ namespace Journey.Infrastructure.Data.Migrations
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("LastModifiedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("LastModifiedByUserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("StartLocation")
                         .IsRequired()
@@ -70,9 +69,64 @@ namespace Journey.Infrastructure.Data.Migrations
 
                     b.HasIndex("ArrivalLocation");
 
+                    b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("LastModifiedByUserId");
+
                     b.HasIndex("StartLocation");
 
                     b.ToTable("Journeys");
+                });
+
+            modelBuilder.Entity("Journey.Domain.Models.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Auth0Id")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Journey.Domain.Models.Journey", b =>
+                {
+                    b.HasOne("Journey.Domain.Models.User", "CreatedByUser")
+                        .WithMany("CreatedJourneys")
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Journey.Domain.Models.User", "LastModifiedByUser")
+                        .WithMany()
+                        .HasForeignKey("LastModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("LastModifiedByUser");
+                });
+
+            modelBuilder.Entity("Journey.Domain.Models.User", b =>
+                {
+                    b.Navigation("CreatedJourneys");
                 });
 #pragma warning restore 612, 618
         }

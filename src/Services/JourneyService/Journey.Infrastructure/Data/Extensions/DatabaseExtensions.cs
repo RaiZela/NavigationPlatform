@@ -1,4 +1,8 @@
-﻿namespace Journey.Infrastructure.Data.Extensions;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+
+namespace Journey.Infrastructure.Data.Extensions;
 
 public static class DatabaseExtensions
 {
@@ -6,8 +10,29 @@ public static class DatabaseExtensions
     {
         using var scope = app.Services.CreateScope();
 
-        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
+        var logger = scope.ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger("DBMigration");
 
-        await context.Database.MigrateAsync();
+        if (env.IsDevelopment() || env.EnvironmentName == "Staging") 
+        {
+            try
+            {
+                var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                logger.LogInformation("Running DB migrations for environment: {Env}", env.EnvironmentName);
+
+                await context.Database.MigrateAsync();
+                logger.LogInformation("Database migration completed.");
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "An error occurred while migrating the database.");
+                throw;
+            }
+        }
+        else
+        {
+            logger.LogInformation("Skipping DB migration in {Env} environment.", env.EnvironmentName);
+        }
     }
 }
+

@@ -4,4 +4,33 @@ services:
     build:
       context: .
       dockerfile: Services/JourneyService/Journey.API/Dockerfile
+    ports:
+       - "5001:8080"
+
+      
+    networks: 
+    - backend
+     
+    environment: 
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Data Source=sqlserver;Database=JourneyDb;User=sa;Password=Your_password123!;Encrypt=False;TrustServerCertificate=True;;
+     
+    depends_on: 
+     - sqlserver
+
+
+  sqlserver:
+       image: mcr.microsoft.com/mssql/server:2022-latest
+       container_name: sqlserver
+       ports:
+         - "1433:1433"
+       environment:
+           MSSQL_SA_PASSWORD: "Your_password123!"
+           ACCEPT_EULA: "Y"
+       networks:
+         - backend
+
+networks:
+  backend:
+    driver: bridge
 
