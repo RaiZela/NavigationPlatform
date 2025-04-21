@@ -4,11 +4,11 @@ namespace Journey.Infrastructure.Data.Interceptors;
 
 public class AuditableEntityInterceptor : SaveChangesInterceptor
 {
-    //private readonly ICurrentUserService _currentUserService;
-    //public AuditableEntityInterceptor(ICurrentUserService currentUserService)
-    //{
-    //    _currentUserService = currentUserService;
-    //}
+    private readonly ICurrentUserService _currentUserService;
+    public AuditableEntityInterceptor(ICurrentUserService currentUserService)
+    {
+        _currentUserService = currentUserService;
+    }
     public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
     {
         try
@@ -47,19 +47,19 @@ public class AuditableEntityInterceptor : SaveChangesInterceptor
         {
             foreach (var entry in context.ChangeTracker.Entries<IEntity>())
             {
-                //var userId = _currentUserService.UserId ?? "system";
+                var userId = _currentUserService.UserId ?? "system";
 
                 if (entry.State == EntityState.Added)
                 {
-                    // entry.Entity.CreatedByUserId = Guid.Parse(userId);
-                    entry.Entity.CreatedByUserId = Guid.Parse("b82d3a63-0bfb-4c2d-9c29-f2d9c9535f6c\r\n");
+                    entry.Entity.CreatedByUserId = Guid.Parse(userId);
+                    //entry.Entity.CreatedByUserId = Guid.Parse("b82d3a63-0bfb-4c2d-9c29-f2d9c9535f6c\r\n");
                     entry.Entity.CreatedAt = DateTime.UtcNow;
                 }
 
                 if (entry.State == EntityState.Added || entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
                 {
-                    //entry.Entity.LastModifiedByUserId = Guid.Parse(userId);
-                    entry.Entity.LastModifiedByUserId = Guid.Parse("b82d3a63-0bfb-4c2d-9c29-f2d9c9535f6c\r\n");
+                    entry.Entity.LastModifiedByUserId = Guid.Parse(userId);
+                    //entry.Entity.LastModifiedByUserId = Guid.Parse("b82d3a63-0bfb-4c2d-9c29-f2d9c9535f6c\r\n");
                     entry.Entity.LastModified = DateTime.UtcNow;
                 }
             }

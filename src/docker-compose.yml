@@ -2,8 +2,8 @@ services:
   gateway.api:
     image: ${DOCKER_REGISTRY-}gatewayapi
     build:
-      context: .
-      dockerfile: Gateway.API/Dockerfile
+      context: ApiGateway/Gateway.API
+      dockerfile: Dockerfile
     ports:
        - "5000:5000"
        - "5001:5001"
@@ -17,12 +17,12 @@ services:
       dockerfile: Services/JourneyService/Journey.API/Dockerfile
     ports:
         - "5100:5100"
-        - "51001:5101"
+        - "5002:5002"
     networks: 
     - backend    
     environment: 
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Data Source=sqlserver;Database=JourneyDb;User=sa;Password=Your_password123!;Encrypt=False;TrustServerCertificate=True;;    
+      - ConnectionStrings__DefaultConnection=Data Source=sqlserver;Database=JourneyDb;User=sa;Password=Your_password123!;Encrypt=False;TrustServerCertificate=True;
     depends_on: 
      - sqlserver
 
@@ -38,10 +38,19 @@ services:
        networks:
          - backend
 
-
+  keycloak:
+      image: quay.io/keycloak/keycloak:latest
+      container_name: Keycloak
+      command: start-dev
+      environment:
+          - KC_HEALTH_ENABLED=true
+          - KEYCLOAK_ADMIN=admin
+          - KEYCLOAK_ADMIN_PASSWORD=admin
+      volumes:
+          - ./.containers/identity:/opt/keycloak/data
+      ports:
+       - 18080:8080
 
 networks:
   backend:
     driver: bridge
-
-

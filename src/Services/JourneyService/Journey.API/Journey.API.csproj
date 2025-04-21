@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\BuildingBlocks\BuildingBlocks.csproj" />
     <ProjectReference Include="..\Journey.Application\Journey.Application.csproj" />
     <ProjectReference Include="..\Journey.Infrastructure\Journey.Infrastructure.csproj" />
   </ItemGroup>

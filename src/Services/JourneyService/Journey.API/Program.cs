@@ -1,7 +1,11 @@
+using BuildingBlocks.Extensions.Authentication;
 using Journey.Infrastructure;
 using Journey.Infrastructure.Data.Auth;
 using Journey.Infrastructure.Data.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using System.Text.Json;
+using static System.Net.WebRequestMethods;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,20 +29,28 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
-//builder.Services.AddAuthentication("Bearer")
-//    .AddJwtBearer("Bearer", options =>
-//    {
-//        options.Authority = "https://your-auth0-domain/";
-//        options.Audience = "https://your-api";
-//    });
 
-//builder.Services.AddAuthorization();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.Authority = "http://localhost:18080/realms/Nav-platform";
+                options.RequireHttpsMetadata = false;
+                options.Audience = "account";
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateAudience = true,
+                    ValidIssuer= "http://localhost:18080/realms/Nav-platform",
+                    ValidateIssuer = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = false
+                };
+            });
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-//app.UseAuthentication();
-//app.UseAuthorization();
-
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseApiServices();
 
 app.UseMiddleware<CorrelationIdMiddleware>();

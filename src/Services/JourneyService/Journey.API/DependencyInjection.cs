@@ -1,4 +1,5 @@
-﻿using BuildingBlocks.Middleware.Exceptions;
+﻿using BuildingBlocks.Extensions.Authentication;
+using BuildingBlocks.Middleware.Exceptions;
 
 namespace Journey.API;
 
@@ -8,6 +9,7 @@ public static class DependencyInjection
     {
         services.AddCarter();
         services.AddScoped<ValidationExceptionMiddleware>();
+      
         return services;
     }
 

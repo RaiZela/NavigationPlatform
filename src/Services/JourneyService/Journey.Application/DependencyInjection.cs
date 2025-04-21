@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Journey.Application.Behaviors;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 
 namespace Journey.Application;
@@ -13,6 +14,7 @@ public static class DependencyInjection
 
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+
         return services;
     }
 
