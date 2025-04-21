@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiGateway", "ApiGateway", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlocks", "BuildingBlocks", "{0840BAEE-0007-4CC5-81B9-3A6D7F70E77F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{248938DB-0885-4F0B-98BB-51652A8B6ACE}"
@@ -27,7 +25,9 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Journey.Infrastructure", "Services\JourneyService\Journey.Infrastructure\Journey.Infrastructure.csproj", "{61E7489E-EFD6-4D39-A10F-BB46F3B1C05D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YarpApiGateway", "ApiGateway\YarpApiGateway\YarpApiGateway.csproj", "{57342F10-9C34-440D-B367-B1E3C109FB87}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiGateway", "ApiGateway", "{B6F107C2-2E88-405F-86CB-9BABCF6346BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gateway.API", "Gateway.API\Gateway.API.csproj", "{550FB05C-DDB5-4879-AC92-62DCB3993548}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,10 +59,10 @@ Global
 		{61E7489E-EFD6-4D39-A10F-BB46F3B1C05D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61E7489E-EFD6-4D39-A10F-BB46F3B1C05D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61E7489E-EFD6-4D39-A10F-BB46F3B1C05D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{57342F10-9C34-440D-B367-B1E3C109FB87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{57342F10-9C34-440D-B367-B1E3C109FB87}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{57342F10-9C34-440D-B367-B1E3C109FB87}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{57342F10-9C34-440D-B367-B1E3C109FB87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{550FB05C-DDB5-4879-AC92-62DCB3993548}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{550FB05C-DDB5-4879-AC92-62DCB3993548}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{550FB05C-DDB5-4879-AC92-62DCB3993548}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{550FB05C-DDB5-4879-AC92-62DCB3993548}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,7 +76,7 @@ Global
 		{C42E2CA0-DDEA-4D58-A09A-2BCB7F4D3134} = {AF5C90A3-B03D-4A2B-A118-0D0C39CC6BE4}
 		{0D508473-70E0-4F33-A884-2766B8D80E26} = {AF5C90A3-B03D-4A2B-A118-0D0C39CC6BE4}
 		{61E7489E-EFD6-4D39-A10F-BB46F3B1C05D} = {AF5C90A3-B03D-4A2B-A118-0D0C39CC6BE4}
-		{57342F10-9C34-440D-B367-B1E3C109FB87} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{550FB05C-DDB5-4879-AC92-62DCB3993548} = {B6F107C2-2E88-405F-86CB-9BABCF6346BA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {972294E6-2BA8-4041-8B36-D12E16CA0A25}

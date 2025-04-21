@@ -1,20 +1,28 @@
 services:
+  gateway.api:
+    image: ${DOCKER_REGISTRY-}gatewayapi
+    build:
+      context: .
+      dockerfile: Gateway.API/Dockerfile
+    ports:
+       - "5000:5000"
+       - "5001:5001"
+    networks:
+       - backend
+
   journey.api:
     image: ${DOCKER_REGISTRY-}journeyapi
     build:
       context: .
       dockerfile: Services/JourneyService/Journey.API/Dockerfile
     ports:
-       - "5001:8080"
-
-      
+        - "5100:5100"
+        - "51001:5101"
     networks: 
-    - backend
-     
+    - backend    
     environment: 
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Data Source=sqlserver;Database=JourneyDb;User=sa;Password=Your_password123!;Encrypt=False;TrustServerCertificate=True;;
-     
+      - ConnectionStrings__DefaultConnection=Data Source=sqlserver;Database=JourneyDb;User=sa;Password=Your_password123!;Encrypt=False;TrustServerCertificate=True;;    
     depends_on: 
      - sqlserver
 
@@ -30,7 +38,10 @@ services:
        networks:
          - backend
 
+
+
 networks:
   backend:
     driver: bridge
+
 
