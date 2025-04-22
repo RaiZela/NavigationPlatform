@@ -1,7 +1,4 @@
-﻿using Journey.Application.Dtos;
-using Mapster;
-
-namespace Journey.Application.Journeys.Commands.CreateJourney;
+﻿namespace Journey.Application.Journeys.Commands.CreateJourney;
 
 public class CreateJourneyHandler(IApplicationDbContext dbContext)
     : ICommandHandler<CreateJourneyCommand, CreateJourneyResult>
@@ -25,9 +22,17 @@ public class CreateJourneyHandler(IApplicationDbContext dbContext)
         }
     }
 
-    private JourneyEntity CreateNewJourney(JourneyDto journey)
+    private JourneyEntity CreateNewJourney(JourneyDto journeyDto)
     {
-        JourneyEntity newJourney = journey.Adapt<JourneyEntity>();
+
+        JourneyEntity newJourney = new JourneyEntity();
+        newJourney.Create(
+        journeyDto.StartLocation,
+        journeyDto.StartTime,
+            journeyDto.ArrivalLocation,
+            journeyDto.ArrivalTime,
+            journeyDto.TransportType,
+            journeyDto.DistanceKm);
 
         newJourney.Id = Guid.NewGuid();
 

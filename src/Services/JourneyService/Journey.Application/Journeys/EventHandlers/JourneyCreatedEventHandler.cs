@@ -1,11 +1,18 @@
-﻿namespace Journey.Application.Journeys.EventHandlers;
-public class JourneyCreatedEventHandler(ILogger<JourneyCreatedEventHandler> logger)
+﻿using MassTransit;
+
+namespace Journey.Application.Journeys.EventHandlers;
+public class JourneyCreatedEventHandler(
+    ILogger<JourneyCreatedEventHandler> logger,
+    IPublishEndpoint publishEndpoint)
     : INotificationHandler<JourneyCreatedEvent>
 {
-    public Task Handle(JourneyCreatedEvent notification, CancellationToken cancellationToken)
+    public async Task Handle(JourneyCreatedEvent notification, CancellationToken cancellationToken)
     {
         logger.LogInformation("Domain Event Handled: {DomainEvent}", notification.GetType().Name);
-        return Task.CompletedTask;
+
+        await publishEndpoint.Publish(notification, cancellationToken);
+
     }
 }
+
 

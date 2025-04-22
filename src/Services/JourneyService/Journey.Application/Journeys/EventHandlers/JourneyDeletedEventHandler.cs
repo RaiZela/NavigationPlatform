@@ -2,12 +2,12 @@
 
 namespace Journey.Application.Journeys.EventHandlers;
 
-public class JourneyUpdatedEventHandler(
-    ILogger<JourneyUpdatedEventHandler> logger,
+public class JourneyDeletedEventHandler(
+    ILogger<JourneyDeletedEventHandler> logger,
       IPublishEndpoint publishEndpoint)
-    : INotificationHandler<JourneyUpdatedEvent>
+    : INotificationHandler<JourneyDeletedEvent>
 {
-    public async Task Handle(JourneyUpdatedEvent notification, CancellationToken cancellationToken)
+    public async Task Handle(JourneyDeletedEvent notification, CancellationToken cancellationToken)
     {
         logger.LogInformation("Domain Event Handled: {DomainEvent}", notification.GetType().Name);
 

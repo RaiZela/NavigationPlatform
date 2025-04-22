@@ -9,7 +9,7 @@ public class Journey : Aggregate<Guid>
     public TransportType TransportType { get; private set; }
     public DistanceKM DistanceKm { get; private set; }
 
-    public static Journey Create(Guid id,
+    public Journey Create(
         string startLocation,
         DateTime startTime,
         string arrivalLocation,
@@ -48,5 +48,10 @@ public class Journey : Aggregate<Guid>
         DistanceKm = distanceKM;
 
         AddDomainEvent(new JourneyUpdatedEvent(this));
+    }
+
+    public void Delete(Guid Id)
+    {
+        AddDomainEvent(new JourneyDeletedEvent(Id));
     }
 }

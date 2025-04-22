@@ -1,8 +1,4 @@
-﻿
-using Journey.Application.Journeys.Commands.UpdateJourney;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
-
-namespace Journey.Application.Journeys.Commands.DeleteJourney;
+﻿namespace Journey.Application.Journeys.Commands.DeleteJourney;
 
 public class DeleteJourneyHandler(IApplicationDbContext dbContext)
     : ICommandHandler<DeleteJourneyCommand, DeleteJourneyResult>
@@ -15,6 +11,7 @@ public class DeleteJourneyHandler(IApplicationDbContext dbContext)
         if (journey is null)
             throw new JourneyNotFoundException(command.Id);
 
+        journey.Delete(command.Id);
         dbContext.Journeys.Remove(journey);
 
         await dbContext.SaveChangesAsync(cancellationToken);

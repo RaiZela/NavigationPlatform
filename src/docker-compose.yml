@@ -50,6 +50,16 @@ services:
           - ./.containers/identity:/opt/keycloak/data
       ports:
        - 18080:8080
+  newsletter-mq:
+           image: rabbitmq:management
+           container_name: Journey.RabbitMq
+           hostname: journey-mq
+           volumes:
+               - ./.containers/queue/data/:/var/lib/rabbitmq
+               - ./.containers/queue/log/:/var/log/rabbitmq
+           environment:
+                RABBITMQ_DEFAULT_USER: guest
+                RABBITMQ_DEFAULT_PASS: guest
 
 networks:
   backend:
