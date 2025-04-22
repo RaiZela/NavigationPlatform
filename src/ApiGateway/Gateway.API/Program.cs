@@ -45,7 +45,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
                 // Convert to RSA key
                 var rsa = RSA.Create();
-                rsa.ImportRSAPublicKey(Convert.FromBase64String(base64Key), out _);
+                rsa.ImportSubjectPublicKeyInfo(Convert.FromBase64String(base64Key), out _);
 
                 // Create RsaSecurityKey
                 var rsaSecurityKey = new RsaSecurityKey(rsa);
@@ -67,6 +67,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 
 builder.Services.AddAuthorization();
+
+builder.Services.AddHttpLogging(logging => {
+    logging.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.All;
+});
 
 var app = builder.Build();
 
@@ -91,11 +95,10 @@ app.UseAuthorization();
 //app.MapReverseProxy().RequireAuthorization();
 app.MapReverseProxy(proxyPipeline =>
 {
-    proxyPipeline.UseAuthentication();
-    proxyPipeline.UseAuthorization();
+    //proxyPipeline.UseAuthentication();
+    //proxyPipeline.UseAuthorization();
 });
-
-app.MapReverseProxy();
+app.UseHttpLogging();
 
 app.Run();
 
