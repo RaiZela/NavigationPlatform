@@ -19,7 +19,6 @@ public class Journey : Aggregate<Guid>
     {
         var journey = new Journey
         {
-            Id = id,
             StartLocation = startLocation,
             StartTime = startTime,
             ArrivalLocation = arrivalLocation,
