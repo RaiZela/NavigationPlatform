@@ -26,8 +26,11 @@ builder.Services.AddMassTransit(busConfigurator =>
     });
 });
 
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.ListenAnyIP(5100);
+});
 
-//Add services to the container
 builder.Services.AddApplicationServices()
     .AddInfrastructureServices(builder.Configuration)
     .AddApiServices();
@@ -44,40 +47,40 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 
 
-//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-//            .AddJwtBearer(options =>
-//            {
-//                options.Authority = "http://localhost:8080/realms/Nav-platform/";
-//                options.RequireHttpsMetadata = false;
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.Authority = "http://localhost:8080/realms/Nav-platform/";
+                options.RequireHttpsMetadata = false;
 
-//                options.Audience = "account";
-//                var base64Key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxyjJiHBWyNX/iJ5EWJAMCAF/kxrsl8mZ8/EBR/pcYLGnBQV4OAIqcOhaE8H8H0Oy7SA7qL7j++oAh+kabsLezvtvsaXHsbFpwVtbuaVgGUPs0GRPFeEG/DW5a8zokbD8SmRfMuBcYoCqURqjEh+zYBIkxx8/5Quaxx/RDGDwLYJ0/roz2dPyPrf0jU7Nzaelq3WEMLhoxRk6Y3fwptngFqEEfa+dgVxwI1isx5vQb89QDrBBaOvM34fkV5f/pdLzybZebTGOKFoWZbdqQMH1biLUNGLxxC8C8pgznN+qtQ2bBIF/AhuvK1OnmedYSxqvJpnVuakuMAtKCkovnud5RwIDAQAB";
+                options.Audience = "account";
+                var base64Key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxyjJiHBWyNX/iJ5EWJAMCAF/kxrsl8mZ8/EBR/pcYLGnBQV4OAIqcOhaE8H8H0Oy7SA7qL7j++oAh+kabsLezvtvsaXHsbFpwVtbuaVgGUPs0GRPFeEG/DW5a8zokbD8SmRfMuBcYoCqURqjEh+zYBIkxx8/5Quaxx/RDGDwLYJ0/roz2dPyPrf0jU7Nzaelq3WEMLhoxRk6Y3fwptngFqEEfa+dgVxwI1isx5vQb89QDrBBaOvM34fkV5f/pdLzybZebTGOKFoWZbdqQMH1biLUNGLxxC8C8pgznN+qtQ2bBIF/AhuvK1OnmedYSxqvJpnVuakuMAtKCkovnud5RwIDAQAB";
 
-//                // Convert to RSA key
-//                var rsa = RSA.Create();
-//                rsa.ImportSubjectPublicKeyInfo(Convert.FromBase64String(base64Key), out _);
+                // Convert to RSA key
+                var rsa = RSA.Create();
+                rsa.ImportSubjectPublicKeyInfo(Convert.FromBase64String(base64Key), out _);
 
-//                // Create RsaSecurityKey
-//                var rsaSecurityKey = new RsaSecurityKey(rsa);
+                // Create RsaSecurityKey
+                var rsaSecurityKey = new RsaSecurityKey(rsa);
 
-//                options.TokenValidationParameters = new TokenValidationParameters
-//                {
-//                    ValidAudience = "account",
-//                    ValidateAudience = true,
-//                    ValidIssuer = "http://localhost:8080/realms/Nav-platform",
-//                    ValidateIssuer = true,
-//                    ValidateLifetime = true,
-//                    ValidateIssuerSigningKey = true,
-//                    IssuerSigningKey = rsaSecurityKey
-//                };
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidAudience = "account",
+                    ValidateAudience = true,
+                    ValidIssuer = "http://localhost:8080/realms/Nav-platform",
+                    ValidateIssuer = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = rsaSecurityKey
+                };
 
-//            });
-//builder.Services.AddAuthorization();
+            });
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-//app.UseAuthentication();
-//app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseApiServices();
 
 app.UseMiddleware<CorrelationIdMiddleware>();

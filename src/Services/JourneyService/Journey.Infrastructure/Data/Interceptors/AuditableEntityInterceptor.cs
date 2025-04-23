@@ -43,34 +43,51 @@ public class AuditableEntityInterceptor : SaveChangesInterceptor
     {
         if (context == null)
             return;
+
         try
         {
+            var username = _currentUserService.Username;
+
+            if (string.IsNullOrEmpty(username))
+                return;
+
+            var user = context.Set<User>().FirstOrDefault(u => u.Username == username);
+            if (user == null)
+            {
+                user = new User
+                {
+                    Id = Guid.NewGuid(),
+                    Username = username
+                };
+
+                context.Set<User>().Add(user);
+                context.SaveChanges();
+            }
+
+            var userId = user.Id;
+
             foreach (var entry in context.ChangeTracker.Entries<IEntity>())
             {
-                var userId = _currentUserService.UserId ?? "system";
-
                 if (entry.State == EntityState.Added)
                 {
-                    entry.Entity.CreatedByUserId = Guid.Parse(userId);
-                    //entry.Entity.CreatedByUserId = Guid.Parse("b82d3a63-0bfb-4c2d-9c29-f2d9c9535f6c\r\n");
+                    entry.Entity.CreatedByUserId = userId;
                     entry.Entity.CreatedAt = DateTime.UtcNow;
                 }
 
                 if (entry.State == EntityState.Added || entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
                 {
-                    entry.Entity.LastModifiedByUserId = Guid.Parse(userId);
-                    //entry.Entity.LastModifiedByUserId = Guid.Parse("b82d3a63-0bfb-4c2d-9c29-f2d9c9535f6c\r\n");
+                    entry.Entity.LastModifiedByUserId = userId;
                     entry.Entity.LastModified = DateTime.UtcNow;
                 }
             }
-
         }
         catch (Exception ex)
         {
-
+            // TODO: add logging here
             throw;
         }
     }
+
 }
 
 public static class Extensions

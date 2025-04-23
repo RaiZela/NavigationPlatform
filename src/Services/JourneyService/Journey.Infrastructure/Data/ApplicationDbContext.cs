@@ -10,6 +10,8 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     public DbSet<JourneyEntity> Journeys { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<SharedJourney> SharedJourneys { get; set; }
+    public DbSet<FavoriteJourney> FavoriteJourneys { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

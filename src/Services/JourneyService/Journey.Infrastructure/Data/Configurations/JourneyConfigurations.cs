@@ -24,10 +24,28 @@ public class JourneyConfigurations : IEntityTypeConfiguration<JourneyEntity>
    .OnDelete(DeleteBehavior.Restrict);
     }
 
-    public void Configure(EntityTypeBuilder<User> builder)
+    
+    public void Configure(EntityTypeBuilder<SharedJourney> builder)
     {
-        builder.HasKey(x => x.Id);
+        builder
+            .HasKey(sj => new { sj.OwnerId, sj.SharedWIthId, sj.JourneyId });
 
-        builder.HasIndex(u => u.Auth0Id).IsUnique();
+        builder
+            .HasOne(sj => sj.Owner)
+            .WithMany()
+            .HasForeignKey(sj => sj.OwnerId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder
+            .HasOne(sj => sj.SharedWIth)
+            .WithMany()
+            .HasForeignKey(sj => sj.SharedWIthId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder
+            .HasOne(sj => sj.Journey)
+            .WithMany()
+            .HasForeignKey(sj => sj.JourneyId);
     }
+
 }

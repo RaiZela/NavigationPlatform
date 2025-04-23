@@ -95,8 +95,8 @@ app.UseAuthorization();
 //app.MapReverseProxy().RequireAuthorization();
 app.MapReverseProxy(proxyPipeline =>
 {
-    //proxyPipeline.UseAuthentication();
-    //proxyPipeline.UseAuthorization();
+    proxyPipeline.UseAuthentication();
+    proxyPipeline.UseAuthorization();
 });
 app.UseHttpLogging();
 

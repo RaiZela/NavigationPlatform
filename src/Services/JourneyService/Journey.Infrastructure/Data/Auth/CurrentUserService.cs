@@ -3,11 +3,11 @@ namespace Journey.Infrastructure.Data.Auth;
 
 public class CurrentUserService : ICurrentUserService
 {
-    public string? UserId { get; }
+    public string? Username { get; }
 
     public CurrentUserService(IHttpContextAccessor httpContextAccessor)
     {
-        UserId = httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        Username = httpContextAccessor.HttpContext?.User?.FindFirst("preferred_username")?.Value;
     }
 }
 
