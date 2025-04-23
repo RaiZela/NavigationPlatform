@@ -66,9 +66,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("authenticated", policy =>
+        policy.RequireAuthenticatedUser());
+});
 
-builder.Services.AddHttpLogging(logging => {
+builder.Services.AddHttpLogging(logging =>
+{
     logging.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.All;
 });
 
@@ -86,6 +91,8 @@ app.UseHttpsRedirection();
 app.UseSerilogRequestLogging();
 
 app.UseCors("CorsPolicy");
+
+app.UseRouting();
 
 app.UseAuthentication();
 

@@ -12,15 +12,9 @@ public class GetJourneysByUserHandler(IApplicationDbContext dbContext)
             .ToListAsync(cancellationToken);
 
 
-        var journeyDtos = ProjectToJourneyDto(journeys);
+        List<JourneyDto> journeyDtos = journeys.Adapt<List<JourneyDto>>();
 
         return new GetJourneysByUserResult(journeyDtos);
     }
 
-
-    private List<JourneyDto> ProjectToJourneyDto(List<JourneyEntity> journeys)
-    {
-        List<JourneyDto> destinationList = journeys.Adapt<List<JourneyDto>>();
-        return destinationList;
-    }
 }

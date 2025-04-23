@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Journey.Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Favorite_Shared_Journeys : Migration
+    public partial class Favourite_Shared_Journeys : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -42,13 +42,13 @@ namespace Journey.Infrastructure.Data.Migrations
                         column: x => x.JourneyId,
                         principalTable: "Journeys",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_FavoriteJourneys_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_FavoriteJourneys_Users_UserId1",
                         column: x => x.UserId1,

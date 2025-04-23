@@ -1,13 +1,20 @@
-﻿namespace Journey.Application.Journeys.Commands.UpdateJourney;
+﻿using Journey.Application.Exceptionsl;
 
-public class UpdateJourneyHandler(IApplicationDbContext dbContext)
+namespace Journey.Application.Journeys.Commands.UpdateJourney;
+
+public class UpdateJourneyHandler(IApplicationDbContext dbContext, ICurrentUserService currentUserService)
     : ICommandHandler<UpdateJourneyCommand, UpdateJourneyResult>
 {
     public async Task<UpdateJourneyResult> Handle(UpdateJourneyCommand command, CancellationToken cancellationToken)
     {
+        var userName = currentUserService.Username;
+        var user = dbContext.Users.FirstOrDefault(x => x.Username == userName);
+
+        if (user is null)
+            throw new JourneyNoContentException();
 
         var journey = await dbContext.Journeys
-        .FindAsync(command.Journey.Id, cancellationToken);
+        .FirstOrDefaultAsync(x => x.Id == command.Journey.Id && x.CreatedByUserId == user.Id, cancellationToken);
 
         if (journey is null)
             throw new JourneyNotFoundException(command.Journey.Id);

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Journey.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250423000112_Favorite_Shared_Journeys")]
-    partial class Favorite_Shared_Journeys
+    [Migration("20250423082430_Favourite_Shared_Journeys")]
+    partial class Favourite_Shared_Journeys
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -154,13 +154,13 @@ namespace Journey.Infrastructure.Data.Migrations
                     b.HasOne("Journey.Domain.Models.Journey", "Journey")
                         .WithMany()
                         .HasForeignKey("JourneyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Journey.Domain.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Journey.Domain.Models.User", null)

@@ -151,13 +151,13 @@ namespace Journey.Infrastructure.Data.Migrations
                     b.HasOne("Journey.Domain.Models.Journey", "Journey")
                         .WithMany()
                         .HasForeignKey("JourneyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Journey.Domain.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Journey.Domain.Models.User", null)

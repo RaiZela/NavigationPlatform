@@ -1,100 +1,114 @@
-﻿using Journey.Infrastructure.Data.Auth;
-
-namespace Journey.Infrastructure.Data.Interceptors;
-
-public class AuditableEntityInterceptor : SaveChangesInterceptor
+﻿namespace Journey.Infrastructure.Data.Interceptors
 {
-    private readonly ICurrentUserService _currentUserService;
-    public AuditableEntityInterceptor(ICurrentUserService currentUserService)
+    public class AuditableEntityInterceptor : SaveChangesInterceptor
     {
-        _currentUserService = currentUserService;
-    }
-    public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
-    {
-        try
+        private readonly ICurrentUserService _currentUserService;
+        private bool _isSavingChanges = false;  // To guard against recursive SaveChanges
+        public AuditableEntityInterceptor(ICurrentUserService currentUserService)
         {
-            UpdateEntities(eventData.Context);
-            return base.SavingChanges(eventData, result);
-        }
-        catch (Exception ex)
-        {
-
-            throw;
+            _currentUserService = currentUserService;
         }
 
-    }
-
-    public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
-    {
-        try
+        public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
         {
-            UpdateEntities(eventData.Context);
-            return base.SavingChangesAsync(eventData, result, cancellationToken);
+            if (_isSavingChanges)
+                return base.SavingChanges(eventData, result);
 
+            try
+            {
+                _isSavingChanges = true;
+                UpdateEntities(eventData.Context);
+                return base.SavingChanges(eventData, result);
+            }
+            catch (Exception ex)
+            {
+                // TODO: add logging here
+                throw;
+            }
+            finally
+            {
+                _isSavingChanges = false;
+            }
         }
-        catch (Exception ex)
-        {
 
-            throw;
+        public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
+        {
+            if (_isSavingChanges)
+                return base.SavingChangesAsync(eventData, result, cancellationToken);
+
+            try
+            {
+                _isSavingChanges = true;
+                UpdateEntities(eventData.Context);
+                return base.SavingChangesAsync(eventData, result, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                // TODO: add logging here
+                throw;
+            }
+            finally
+            {
+                _isSavingChanges = false;
+            }
         }
-    }
 
-    public void UpdateEntities(DbContext? context)
-    {
-        if (context == null)
-            return;
-
-        try
+        public void UpdateEntities(DbContext? context)
         {
-            var username = _currentUserService.Username;
-
-            if (string.IsNullOrEmpty(username))
+            if (context == null)
                 return;
 
-            var user = context.Set<User>().FirstOrDefault(u => u.Username == username);
-            if (user == null)
+            try
             {
-                user = new User
+                var username = _currentUserService.Username;
+
+                if (string.IsNullOrEmpty(username))
+                    throw new ArgumentNullException("Username is null");
+
+                var user = context.Set<User>().FirstOrDefault(u => u.Username == username);
+                if (user == null)
                 {
-                    Id = Guid.NewGuid(),
-                    Username = username
-                };
+                    user = new User
+                    {
+                        Id = Guid.NewGuid(),
+                        Username = username
+                    };
 
-                context.Set<User>().Add(user);
-                context.SaveChanges();
-            }
-
-            var userId = user.Id;
-
-            foreach (var entry in context.ChangeTracker.Entries<IEntity>())
-            {
-                if (entry.State == EntityState.Added)
-                {
-                    entry.Entity.CreatedByUserId = userId;
-                    entry.Entity.CreatedAt = DateTime.UtcNow;
+                    // Avoid calling SaveChanges here to prevent recursion.
+                    // You can handle adding the user after all changes are saved.
                 }
 
-                if (entry.State == EntityState.Added || entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
+                var userId = user.Id;
+
+                foreach (var entry in context.ChangeTracker.Entries<IEntity>())
                 {
-                    entry.Entity.LastModifiedByUserId = userId;
-                    entry.Entity.LastModified = DateTime.UtcNow;
+                    if (entry.State == EntityState.Added)
+                    {
+                        entry.Entity.CreatedByUserId = userId;
+                        entry.Entity.CreatedAt = DateTime.UtcNow;
+                    }
+
+                    if (entry.State == EntityState.Added || entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
+                    {
+                        entry.Entity.LastModifiedByUserId = userId;
+                        entry.Entity.LastModified = DateTime.UtcNow;
+                    }
                 }
             }
-        }
-        catch (Exception ex)
-        {
-            // TODO: add logging here
-            throw;
+            catch (Exception ex)
+            {
+                // TODO: add logging here
+                throw;
+            }
         }
     }
 
-}
-
-public static class Extensions
-{
-    public static bool HasChangedOwnedEntities(this EntityEntry entry) =>
-        entry.References.Any(r =>
-        r.TargetEntry != null &&
-        r.TargetEntry.Metadata.IsOwned() &&
-        (r.TargetEntry.State == EntityState.Added || r.TargetEntry.State == EntityState.Modified));
+    public static class Extensions
+    {
+        public static bool HasChangedOwnedEntities(this EntityEntry entry) =>
+            entry.References.Any(r =>
+                r.TargetEntry != null &&
+                r.TargetEntry.Metadata.IsOwned() &&
+                (r.TargetEntry.State == EntityState.Added || r.TargetEntry.State == EntityState.Modified));
+    }
 }

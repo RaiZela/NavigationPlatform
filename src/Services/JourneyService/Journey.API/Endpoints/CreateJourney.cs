@@ -1,15 +1,9 @@
-﻿using Azure.Core;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-
-namespace Journey.API.Endpoints;
+﻿namespace Journey.API.Endpoints;
 
 
 public record CreateJourneyRequest(JourneyDto Journey);
 public record CreateJourneyResponse(Guid Id);
 
-//[Authorize(Roles = "admin")]
-[AllowAnonymous]
 public class CreateJourney : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
@@ -33,7 +27,8 @@ public class CreateJourney : ICarterModule
             .Produces<CreateJourneyResponse>(StatusCodes.Status201Created)
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .WithSummary("Create Journey")
-            .WithDescription("Create Journey");
+            .WithDescription("Create Journey")
+            .RequireAuthorization("authenticated");
     }
 }
 

@@ -1,3 +1,4 @@
+using Journey.Application.Data;
 using Journey.Infrastructure;
 using Journey.Infrastructure.Data.Auth;
 using Journey.Infrastructure.Data.Extensions;
@@ -8,8 +9,14 @@ using System.Security.Cryptography;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
+builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddSwaggerGen();
+
 builder.Services.AddMassTransit(busConfigurator =>
 {
     busConfigurator.SetKebabCaseEndpointNameFormatter();
@@ -46,14 +53,16 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
             .AddJwtBearer(options =>
             {
                 options.Authority = "http://localhost:8080/realms/Nav-platform/";
                 options.RequireHttpsMetadata = false;
-
-                options.Audience = "account";
                 var base64Key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxyjJiHBWyNX/iJ5EWJAMCAF/kxrsl8mZ8/EBR/pcYLGnBQV4OAIqcOhaE8H8H0Oy7SA7qL7j++oAh+kabsLezvtvsaXHsbFpwVtbuaVgGUPs0GRPFeEG/DW5a8zokbD8SmRfMuBcYoCqURqjEh+zYBIkxx8/5Quaxx/RDGDwLYJ0/roz2dPyPrf0jU7Nzaelq3WEMLhoxRk6Y3fwptngFqEEfa+dgVxwI1isx5vQb89QDrBBaOvM34fkV5f/pdLzybZebTGOKFoWZbdqQMH1biLUNGLxxC8C8pgznN+qtQ2bBIF/AhuvK1OnmedYSxqvJpnVuakuMAtKCkovnud5RwIDAQAB";
 
                 // Convert to RSA key
@@ -71,25 +80,79 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     ValidateIssuer = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = rsaSecurityKey
+                    IssuerSigningKey = rsaSecurityKey,
                 };
 
             });
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("authenticated", policy => policy.RequireAuthenticatedUser());
+});
+
+
+builder.Services.AddHttpLogging(logging =>
+{
+    logging.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.All;
+});
+
 
 var app = builder.Build();
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseHttpsRedirection();
+
+app.UseSerilogRequestLogging();
+
+
+//app.UseAuthentication();
+//app.UseAuthorization();
+
+//app.Use(async (context, next) =>
+//{
+//    var token = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+
+//    if (!string.IsNullOrEmpty(token))
+//    {
+//        context.Request.Headers.Append("Authorization", $"Bearer {token}");
+//    }
+//    await next();
+//});
+
+app.UseRouting();
+
+app.Use(async (context, next) =>
+{
+    var authHeader = context.Request.Headers["Authorization"].ToString();
+    Console.WriteLine($"Authorization Header: {authHeader}");
+
+    foreach (var header in context.Request.Headers)
+    {
+        Console.WriteLine($"{header.Key}: {header.Value}");
+    }
+
+    await next();
+});
+
+
 app.UseAuthentication();
+
+
 app.UseAuthorization();
+
 app.UseApiServices();
 
 app.UseMiddleware<CorrelationIdMiddleware>();
-app.UseSerilogRequestLogging();
-
 if (app.Environment.IsDevelopment())
 {
     await app.InitializeDatabaseAsync();
 }
+
+app.UseHttpLogging();
 //Configure HTTP request pipeline
 
 //app.MapGet("/", () => "Hello World!");

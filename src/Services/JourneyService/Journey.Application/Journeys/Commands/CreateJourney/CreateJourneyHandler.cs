@@ -1,8 +1,11 @@
-﻿namespace Journey.Application.Journeys.Commands.CreateJourney;
+﻿using Microsoft.AspNetCore.Authorization;
+
+namespace Journey.Application.Journeys.Commands.CreateJourney;
 
 public class CreateJourneyHandler(IApplicationDbContext dbContext)
     : ICommandHandler<CreateJourneyCommand, CreateJourneyResult>
 {
+    [Authorize]
     public async Task<CreateJourneyResult> Handle(CreateJourneyCommand command, CancellationToken cancellationToken)
     {
         try
@@ -26,13 +29,13 @@ public class CreateJourneyHandler(IApplicationDbContext dbContext)
     {
 
         JourneyEntity newJourney = new JourneyEntity();
-        newJourney.Create(
-        journeyDto.StartLocation,
-        journeyDto.StartTime,
-            journeyDto.ArrivalLocation,
-            journeyDto.ArrivalTime,
-            journeyDto.TransportType,
-            journeyDto.DistanceKm);
+        newJourney = newJourney.Create(
+         journeyDto.StartLocation,
+         journeyDto.StartTime,
+             journeyDto.ArrivalLocation,
+             journeyDto.ArrivalTime,
+             journeyDto.TransportType,
+             journeyDto.DistanceKm);
 
         newJourney.Id = Guid.NewGuid();
 

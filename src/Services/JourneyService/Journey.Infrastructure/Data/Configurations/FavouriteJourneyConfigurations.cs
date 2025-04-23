@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace Journey.Infrastructure.Data.Configurations;
+﻿namespace Journey.Infrastructure.Data.Configurations;
 
 public class FavouriteJourneyConfigurations : IEntityTypeConfiguration<FavoriteJourney>
 {
@@ -12,11 +10,13 @@ public class FavouriteJourneyConfigurations : IEntityTypeConfiguration<FavoriteJ
         builder
             .HasOne(fj => fj.Journey)
             .WithMany()
-        .HasForeignKey(fj => fj.JourneyId);
+        .HasForeignKey(fj => fj.JourneyId)
+        .OnDelete(DeleteBehavior.Restrict);
 
         builder
             .HasOne(fj => fj.User)
             .WithMany()
-            .HasForeignKey(fj => fj.UserId);
+            .HasForeignKey(fj => fj.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
