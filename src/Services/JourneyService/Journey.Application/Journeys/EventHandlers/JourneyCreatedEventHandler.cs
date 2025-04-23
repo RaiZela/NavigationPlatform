@@ -10,7 +10,15 @@ public class JourneyCreatedEventHandler(
     {
         logger.LogInformation("Domain Event Handled: {DomainEvent}", notification.GetType().Name);
 
-        await publishEndpoint.Publish(notification, cancellationToken);
+        try
+        {
+            await publishEndpoint.Publish(notification, cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            logger.LogInformation("JourneyCreatedEvent EXCEPTION" + ex.Message);
+            throw;
+        }
 
     }
 }

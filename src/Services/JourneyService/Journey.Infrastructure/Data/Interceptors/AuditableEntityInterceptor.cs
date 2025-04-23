@@ -73,9 +73,7 @@
                         Id = Guid.NewGuid(),
                         Username = username
                     };
-
-                    // Avoid calling SaveChanges here to prevent recursion.
-                    // You can handle adding the user after all changes are saved.
+                    context.Add<User>(user);
                 }
 
                 var userId = user.Id;
