@@ -1,6 +1,7 @@
 using MassTransit;
 using NotificationService.Hubs;
 using NotificationService.JourneyEvents;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,10 @@ builder.Services.AddMassTransit(busConfigurator =>
 {
     busConfigurator.SetKebabCaseEndpointNameFormatter();
 
+    busConfigurator.AddConsumer<JourneyCreatedConsumer>();
+    busConfigurator.AddConsumer<JourneyUpdatedConsumer>();
+    busConfigurator.AddConsumer<JourneySharedConsumer>();
+
     busConfigurator.UsingRabbitMq((context, configurator) =>
     {
         configurator.Host(new Uri(builder.Configuration["MessageBroker:Host"]!), h =>
@@ -20,33 +25,34 @@ builder.Services.AddMassTransit(busConfigurator =>
             h.Username(builder.Configuration["MessageBroker:Username"]);
             h.Password(builder.Configuration["MessageBroker:Password"]);
         });
-
+        configurator.ReceiveEndpoint("notification-service", e =>
+        {
+            e.ConfigureConsumer<JourneyCreatedConsumer>(context);
+            e.ConfigureConsumer<JourneyUpdatedConsumer>(context);
+            e.ConfigureConsumer<JourneySharedConsumer>(context);
+        });
         configurator.ConfigureEndpoints(context);
     });
 });
 
+builder.Services.AddMassTransitHostedService();
+
+
+Log.Logger = new LoggerConfiguration()
+    .Enrich.FromLogContext()
+    .Enrich.WithEnvironmentName()
+    .Enrich.WithThreadId()
+    .Enrich.WithProcessId()
+    .WriteTo.Async(wt => wt.Console(new Serilog.Formatting.Json.JsonFormatter()))
+    .WriteTo.Async(wt => wt.File(new Serilog.Formatting.Json.JsonFormatter(), "Logs/logs.json"))
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+
 builder.Services.AddSignalR();
-builder.Services.AddMassTransit(x =>
+builder.WebHost.ConfigureKestrel(serverOptions =>
 {
-    x.AddConsumer<JourneyCreatedConsumer>();
-    x.AddConsumer<JourneyUpdatedConsumer>();
-    x.AddConsumer<JourneySharedConsumer>();
-
-    x.UsingRabbitMq((ctx, cfg) =>
-    {
-        cfg.Host("rabbitmq", "/", h =>
-        {
-            h.Username("guest");
-            h.Password("guest");
-        });
-
-        cfg.ReceiveEndpoint("notification-service", e =>
-        {
-            e.ConfigureConsumer<JourneyCreatedConsumer>(ctx);
-            e.ConfigureConsumer<JourneyUpdatedConsumer>(ctx);
-            e.ConfigureConsumer<JourneySharedConsumer>(ctx);
-        });
-    });
+    serverOptions.ListenAnyIP(5200);
 });
 
 var app = builder.Build();
@@ -58,12 +64,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+//app.UseHttpsRedirection();
 
 app.MapHub<NotificationHub>("/hub/notifications");
 

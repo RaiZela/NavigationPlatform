@@ -26,6 +26,17 @@ services:
     depends_on:
       - sqlserver
 
+  notificationservice:
+    image: ${DOCKER_REGISTRY-}notificationservice
+    build:
+      context: .
+      dockerfile: Services/NotificationService/NotificationService/Dockerfile
+    ports:
+      - "5200:5200"
+      - "5003:5003"
+    networks:
+      - backend
+
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: sqlserver
@@ -73,6 +84,9 @@ services:
     networks:
       - backend
 
+
+
 networks:
   backend:
     driver: bridge
+

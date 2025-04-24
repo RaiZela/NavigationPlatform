@@ -1,0 +1,56 @@
+name: Frontend CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./frontend
+
+      - name: Run ESLint + Prettier
+        run: |
+          npm run lint
+          npm run format:check
+        working-directory: ./frontend
+
+      - name: Run OWASP Dependency Check
+        run: npx audit-ci --moderate
+        working-directory: ./frontend
+
+      - name: Run unit tests
+        run: npm run test -- --coverage
+        working-directory: ./frontend
+
+      - name: Check coverage threshold
+        run: |
+          npx nyc check-coverage --lines 80 --functions 80 --branches 80 --statements 80
+        working-directory: ./frontend
+
+      - name: Build frontend
+        run: npm run build
+        working-directory: ./frontend
+
+      - name: Build Docker image
+        run: docker build -t frontend:${{ github.sha }} -f ./frontend/Dockerfile .
+
+      - name: Push Docker image
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          docker tag frontend:${{ github.sha }} myrepo/frontend:${{ github.sha }}
+          docker push myrepo/frontend:${{ github.sha }}

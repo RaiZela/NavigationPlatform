@@ -1,4 +1,5 @@
-﻿using MassTransit;
+﻿using Journey.Domain.EventModels;
+using MassTransit;
 
 namespace Journey.Application.Journeys.EventHandlers;
 public class JourneyCreatedEventHandler(
@@ -12,7 +13,20 @@ public class JourneyCreatedEventHandler(
 
         try
         {
-            await publishEndpoint.Publish(notification, cancellationToken);
+            var message = new JourneyEventModel
+            {
+                ArrivalLocation = notification.journey.ArrivalLocation,
+                ArrivalTime = notification.journey.ArrivalTime,
+                StartLocation = notification.journey.StartLocation,
+                StartTime = notification.journey.StartTime,
+                CreatedAt = notification.journey.CreatedAt,
+                CreatedByUser = notification.journey.CreatedByUser.Username,
+                LastModified = notification.journey.LastModified,
+                LastModifiedByUser = notification.journey.LastModifiedByUser.Username,
+                TransportType = (int)notification.journey.TransportType,
+                DistanceKm = notification.journey.DistanceKm.Value
+            };
+            await publishEndpoint.Publish(message, cancellationToken);
         }
         catch (Exception ex)
         {

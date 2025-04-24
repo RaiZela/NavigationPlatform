@@ -71,7 +71,9 @@
                     user = new User
                     {
                         Id = Guid.NewGuid(),
-                        Username = username
+                        Username = username,
+                        Email = _currentUserService.Email
+
                     };
                     context.Add<User>(user);
                 }

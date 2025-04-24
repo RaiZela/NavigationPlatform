@@ -24,7 +24,7 @@ public class JourneyUpdatedConsumer : IConsumer<JourneyUpdatedEvent>
         await _hub.Clients.All.SendAsync("JourneyCreated", new
         {
             e.Journey.Id,
-            e.Journey.CreatedByUserId,
+            e.Journey.CreatedByUser,
             Message = $"Journey '{e.Journey.ArrivalLocation}' was shared!"
         });
     }

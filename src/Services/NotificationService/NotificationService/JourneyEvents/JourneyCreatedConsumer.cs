@@ -17,12 +17,12 @@ public sealed class JourneyCreatedConsumer : IConsumer<JourneyCreatedEvent>
     public async Task Consume(ConsumeContext<JourneyCreatedEvent> context)
     {
         var e = context.Message;
-        _logger.LogInformation("Journey Created: {JourneyId} by {UserId}", e.Journey.Id, e.Journey.LastModifiedByUserId);
+        _logger.LogInformation("Journey Created: {Journey} by {Username}", e.Journey.ArrivalLocation, e.Journey.LastModifiedByUser);
         await _hub.Clients.All.SendAsync("JourneyCreated", new
         {
             e.Journey.Id,
-            e.Journey.CreatedByUserId,
-            Message = $"Journey '{e.Journey.ArrivalLocation}' was created!"
+            e.Journey.LastModifiedByUser,
+            Message = $"Journey to '{e.Journey.ArrivalLocation}' was created!"
         });
     }
 }
