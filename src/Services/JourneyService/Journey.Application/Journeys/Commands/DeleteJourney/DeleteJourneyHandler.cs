@@ -1,6 +1,4 @@
-﻿using Journey.Application.Exceptionsl;
-
-namespace Journey.Application.Journeys.Commands.DeleteJourney;
+﻿namespace Journey.Application.Journeys.Commands.DeleteJourney;
 
 public class DeleteJourneyHandler(IApplicationDbContext dbContext, ICurrentUserService currentUserService)
     : ICommandHandler<DeleteJourneyCommand, DeleteJourneyResult>
@@ -19,7 +17,7 @@ public class DeleteJourneyHandler(IApplicationDbContext dbContext, ICurrentUserS
         if (journey is null)
             throw new JourneyNotFoundException(command.Id);
 
-        journey.Delete(command.Id);
+        journey.Delete();
         dbContext.Journeys.Remove(journey);
 
         await dbContext.SaveChangesAsync(cancellationToken);

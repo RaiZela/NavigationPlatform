@@ -1,5 +1,4 @@
 ﻿namespace BuildingBlocks.Middleware.Serilog;
-
 public class CorrelationIdMiddleware
 {
     private const string HeaderKey = "X-Correlation-ID";

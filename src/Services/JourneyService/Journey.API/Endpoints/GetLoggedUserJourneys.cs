@@ -1,8 +1,6 @@
 ﻿
-using Journey.Application.Journeys.Queries.GetLoggedUserJourneys;
-using Microsoft.AspNetCore.Authorization;
-
 namespace Journey.API.Endpoints;
+
 [Authorize]
 public record GetLoggedUserJourneysResponse(IEnumerable<JourneyDto> Journey);
 public class GetLoggedUserJourneys : ICarterModule

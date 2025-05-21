@@ -31,6 +31,9 @@ services:
     build:
       context: .
       dockerfile: Services/NotificationService/NotificationService/Dockerfile
+    depends_on:
+      journey-mq:
+        condition: service_healthy
     ports:
       - "5200:5200"
       - "5003:5003"
@@ -75,12 +78,21 @@ services:
     image: rabbitmq:management
     container_name: Journey.RabbitMq
     hostname: journey-mq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
     volumes:
       - ./.containers/queue/data/:/var/lib/rabbitmq
       - ./.containers/queue/log/:/var/log/rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "15672:15672"
+      - "5672:5672"
     networks:
       - backend
 

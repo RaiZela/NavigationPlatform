@@ -27,6 +27,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\BuildingBlocks\BuildingBlocks\BuildingBlocks.csproj" />
 		<ProjectReference Include="..\..\JourneyService\Journey.Domain\Journey.Domain.csproj" />
 	</ItemGroup>
 

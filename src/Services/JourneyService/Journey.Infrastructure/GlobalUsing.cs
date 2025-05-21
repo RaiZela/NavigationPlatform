@@ -1,18 +1,20 @@
-﻿global using Journey.Application.Data;
+﻿global using Journey.Application.Data.Interfaces;
 global using Journey.Domain.Abstractions;
 global using Journey.Domain.Models;
 global using Journey.Domain.ValueObjects;
+global using Journey.Infrastructure.Data;
+global using Journey.Infrastructure.Data.Interceptors;
+global using MediatR;
 global using Microsoft.AspNetCore.Builder;
-global using Microsoft.AspNetCore.Http;
+global using Microsoft.AspNetCore.Hosting;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.ChangeTracking;
 global using Microsoft.EntityFrameworkCore.Diagnostics;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
-global using Microsoft.Extensions.DependencyInjection;
-global using System.Reflection;
-global using System.Security.Claims;
-global using JourneyEntity = Journey.Domain.Models.Journey;
-global using Journey.Infrastructure.Data;
-global using Journey.Infrastructure.Data.Interceptors;
 global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Hosting;
+global using Microsoft.Extensions.Logging;
+global using System.Reflection;
+global using JourneyEntity = Journey.Domain.Models.Journey;
 

@@ -1,4 +1,4 @@
-﻿using Journey.Application.Exceptionsl;
+﻿using Journey.Domain.ValueObjects;
 
 namespace Journey.Application.Journeys.Commands.UpdateJourney;
 
@@ -11,7 +11,7 @@ public class UpdateJourneyHandler(IApplicationDbContext dbContext, ICurrentUserS
         var user = dbContext.Users.FirstOrDefault(x => x.Username == userName);
 
         if (user is null)
-            throw new JourneyNoContentException();
+            throw new UserNotFoundException(userName);
 
         var journey = await dbContext.Journeys
         .FirstOrDefaultAsync(x => x.Id == command.Journey.Id && x.CreatedByUserId == user.Id, cancellationToken);
@@ -35,8 +35,8 @@ public class UpdateJourneyHandler(IApplicationDbContext dbContext, ICurrentUserS
             journeyDto.StartTime,
             journeyDto.ArrivalLocation,
             journeyDto.ArrivalTime,
-            journeyDto.TransportType,
-            journeyDto.DistanceKm);
+            (Domain.Enums.TransportType)journeyDto.TransportType,
+           DistanceKM.Of(journeyDto.DistanceKm));
     }
 }
 

@@ -1,6 +1,4 @@
-﻿using Journey.Domain.Models;
-
-namespace Journey.Application.Data;
+﻿namespace Journey.Application.Data.Interfaces;
 
 public interface IApplicationDbContext
 {

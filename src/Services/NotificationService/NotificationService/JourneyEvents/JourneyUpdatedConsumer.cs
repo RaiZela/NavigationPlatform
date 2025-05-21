@@ -1,11 +1,11 @@
-﻿using MassTransit;
+﻿using BuildingBlocks.IntegrationEvents.Events.JourneyEvents;
+using MassTransit;
 using Microsoft.AspNetCore.SignalR;
-using NotificationService.Events;
 using NotificationService.Hubs;
 
 namespace NotificationService.JourneyEvents;
 
-public class JourneyUpdatedConsumer : IConsumer<JourneyUpdatedEvent>
+public class JourneyUpdatedConsumer : IConsumer<JourneyUpdatedIntegrationEvent>
 {
     private readonly ILogger<JourneyUpdatedConsumer> _logger;
     private readonly IHubContext<NotificationHub> _hub;
@@ -16,14 +16,14 @@ public class JourneyUpdatedConsumer : IConsumer<JourneyUpdatedEvent>
         _hub = hub;
     }
 
-    public async Task Consume(ConsumeContext<JourneyUpdatedEvent> context)
+    public async Task Consume(ConsumeContext<JourneyUpdatedIntegrationEvent> context)
     {
         var e = context.Message;
-        _logger.LogInformation("Journey shared: {JourneyId}", e.Journey.Id);
+        _logger.LogInformation("Journey shared: {DistanceKm}", e.Journey.DistanceKm);
 
         await _hub.Clients.All.SendAsync("JourneyCreated", new
         {
-            e.Journey.Id,
+            e.Journey.DistanceKm,
             e.Journey.CreatedByUser,
             Message = $"Journey '{e.Journey.ArrivalLocation}' was shared!"
         });

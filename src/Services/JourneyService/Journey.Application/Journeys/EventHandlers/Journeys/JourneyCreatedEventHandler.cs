@@ -1,7 +1,4 @@
-﻿using Journey.Domain.EventModels;
-using MassTransit;
-
-namespace Journey.Application.Journeys.EventHandlers;
+﻿namespace Journey.Application.Journeys.EventHandlers.Journeys;
 public class JourneyCreatedEventHandler(
     ILogger<JourneyCreatedEventHandler> logger,
     IPublishEndpoint publishEndpoint)
@@ -13,7 +10,7 @@ public class JourneyCreatedEventHandler(
 
         try
         {
-            var message = new JourneyEventModel
+            var model = new JourneyEventModel
             {
                 ArrivalLocation = notification.journey.ArrivalLocation,
                 ArrivalTime = notification.journey.ArrivalTime,
@@ -23,8 +20,13 @@ public class JourneyCreatedEventHandler(
                 CreatedByUser = notification.journey.CreatedByUser.Username,
                 LastModified = notification.journey.LastModified,
                 LastModifiedByUser = notification.journey.LastModifiedByUser.Username,
-                TransportType = (int)notification.journey.TransportType,
+                TransportType = (BuildingBlocks.Enums.TransportType)notification.journey.TransportType,
                 DistanceKm = notification.journey.DistanceKm.Value
+            };
+
+            var message = new JourneyCreatedIntegrationEvent
+            {
+                Journey = model
             };
             await publishEndpoint.Publish(message, cancellationToken);
         }

@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Journey.Application\Journey.Application.csproj" />
+    <ProjectReference Include="..\Journey.Domain\Journey.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>

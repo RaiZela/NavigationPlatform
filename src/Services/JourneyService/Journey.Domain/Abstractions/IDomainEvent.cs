@@ -1,6 +1,4 @@
-﻿using MediatR;
-
-namespace Journey.Domain.Abstractions;
+﻿namespace Journey.Domain.Abstractions;
 
 public interface IDomainEvent : INotification
 {
@@ -8,3 +6,4 @@ public interface IDomainEvent : INotification
     public DateTime OcurredOn => DateTime.Now;
     public string EventType => GetType().AssemblyQualifiedName;
 }
+

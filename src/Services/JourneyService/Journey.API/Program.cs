@@ -1,17 +1,8 @@
-using Journey.Application.Data;
-using Journey.Infrastructure;
-using Journey.Infrastructure.Data.Auth;
-using Journey.Infrastructure.Data.Extensions;
-using MassTransit;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Cryptography;
-
 var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -32,6 +23,8 @@ builder.Services.AddMassTransit(busConfigurator =>
         configurator.ConfigureEndpoints(context);
     });
 });
+
+builder.Services.AddMassTransitHostedService();
 
 builder.WebHost.ConfigureKestrel(serverOptions =>
 {
@@ -93,6 +86,10 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddHttpLogging(logging =>
 {
     logging.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.All;
+    logging.RequestHeaders.Add("Authorization");
+    logging.ResponseHeaders.Add("Authorization");
+    logging.RequestHeaders.Add("X-Request-ID");
+    logging.ResponseHeaders.Add("X-Request-ID");
 });
 
 
@@ -108,35 +105,20 @@ app.UseHttpsRedirection();
 
 app.UseSerilogRequestLogging();
 
-
-//app.UseAuthentication();
-//app.UseAuthorization();
+app.UseRouting();
 
 //app.Use(async (context, next) =>
 //{
-//    var token = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+//    var authHeader = context.Request.Headers["Authorization"].ToString();
+//    Console.WriteLine($"Authorization Header: {authHeader}");
 
-//    if (!string.IsNullOrEmpty(token))
+//    foreach (var header in context.Request.Headers)
 //    {
-//        context.Request.Headers.Append("Authorization", $"Bearer {token}");
+//        Console.WriteLine($"{header.Key}: {header.Value}");
 //    }
+
 //    await next();
 //});
-
-app.UseRouting();
-
-app.Use(async (context, next) =>
-{
-    var authHeader = context.Request.Headers["Authorization"].ToString();
-    Console.WriteLine($"Authorization Header: {authHeader}");
-
-    foreach (var header in context.Request.Headers)
-    {
-        Console.WriteLine($"{header.Key}: {header.Value}");
-    }
-
-    await next();
-});
 
 
 app.UseAuthentication();
@@ -153,8 +135,5 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpLogging();
-//Configure HTTP request pipeline
-
-//app.MapGet("/", () => "Hello World!");
 
 app.Run();

@@ -1,7 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.Extensions.Logging;
-
-namespace BuildingBlocks.Middleware.Exceptions;
+﻿namespace BuildingBlocks.Middleware.Exceptions;
 
 public class ValidationExceptionMiddleware : IMiddleware
 {

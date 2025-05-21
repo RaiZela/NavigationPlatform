@@ -24,7 +24,7 @@ public class JourneyConfigurations : IEntityTypeConfiguration<JourneyEntity>
    .OnDelete(DeleteBehavior.Restrict);
     }
 
-    
+
     public void Configure(EntityTypeBuilder<SharedJourney> builder)
     {
         builder

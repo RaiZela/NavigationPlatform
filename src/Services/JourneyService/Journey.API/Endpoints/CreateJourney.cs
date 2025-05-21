@@ -1,6 +1,5 @@
 ﻿namespace Journey.API.Endpoints;
 
-
 public record CreateJourneyRequest(JourneyDto Journey);
 public record CreateJourneyResponse(Guid Id);
 

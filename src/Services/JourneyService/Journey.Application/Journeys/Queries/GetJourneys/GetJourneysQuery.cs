@@ -1,6 +1,4 @@
-﻿using BuildingBlocks.Pagination;
-
-namespace Journey.Application.Journeys.Queries.GetJourneys;
+﻿namespace Journey.Application.Journeys.Queries.GetJourneys;
 
 public record GetJourneysQuery(PaginationRequest PaginationRequest)
     : IQuery<GetJourneysResult>;

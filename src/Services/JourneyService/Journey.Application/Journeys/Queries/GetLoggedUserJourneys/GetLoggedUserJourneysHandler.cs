@@ -1,6 +1,4 @@
-﻿using Journey.Application.Exceptionsl;
-
-namespace Journey.Application.Journeys.Queries.GetLoggedUserJourneys;
+﻿namespace Journey.Application.Journeys.Queries.GetLoggedUserJourneys;
 
 public class GetLoggedUserJourneysHandler(IApplicationDbContext dbContext, ICurrentUserService currentUserService)
     : IQueryHandler<GetLoggedUserJourneysQuery, GetLoggedUserJourneysResult>

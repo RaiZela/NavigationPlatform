@@ -1,4 +1,9 @@
-﻿global using MediatR;
+﻿global using BuildingBlocks.Enums;
+global using BuildingBlocks.IntegrationEvents.Abstractions;
+global using BuildingBlocks.IntegrationEvents.Models.Journey;
+global using FluentValidation;
+global using MediatR;
 global using Microsoft.AspNetCore.Http;
+global using Microsoft.Extensions.Logging;
 global using Serilog.Context;
 global using System;

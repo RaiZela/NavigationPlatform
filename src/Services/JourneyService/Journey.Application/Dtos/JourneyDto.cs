@@ -1,6 +1,4 @@
-﻿using Journey.Domain.Enums;
-using Journey.Domain.ValueObjects;
-
+﻿
 namespace Journey.Application.Dtos;
 
 public record JourneyDto(
@@ -10,4 +8,4 @@ public record JourneyDto(
             string ArrivalLocation,
             DateTime ArrivalTime,
             TransportType TransportType,
-            DistanceKM DistanceKm);
+            decimal DistanceKm);

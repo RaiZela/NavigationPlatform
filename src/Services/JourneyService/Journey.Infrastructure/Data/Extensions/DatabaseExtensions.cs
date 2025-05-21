@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-
-namespace Journey.Infrastructure.Data.Extensions;
+﻿namespace Journey.Infrastructure.Data.Extensions;
 
 public static class DatabaseExtensions
 {
@@ -13,7 +9,7 @@ public static class DatabaseExtensions
         var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
         var logger = scope.ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger("DBMigration");
 
-        if (env.IsDevelopment() || env.EnvironmentName == "Staging") 
+        if (env.IsDevelopment() || env.EnvironmentName == "Staging")
         {
             try
             {

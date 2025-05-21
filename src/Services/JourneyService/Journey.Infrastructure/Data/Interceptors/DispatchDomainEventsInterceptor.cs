@@ -1,6 +1,4 @@
-﻿using MediatR;
-
-namespace Journey.Infrastructure.Data.Interceptors;
+﻿namespace Journey.Infrastructure.Data.Interceptors;
 
 public class DispatchDomainEventsInterceptor(IMediator mediator) : SaveChangesInterceptor
 {

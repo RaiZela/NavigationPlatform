@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-
-namespace Journey.Application.Behaviors;
+﻿namespace Journey.Application.Behaviors;
 
 public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : notnull

@@ -1,6 +1,4 @@
-﻿using BuildingBlocks.Middleware.Exceptions;
-
-namespace Journey.API;
+﻿namespace Journey.API;
 
 public static class DependencyInjection
 {

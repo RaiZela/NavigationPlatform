@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-
-namespace Journey.Application.Journeys.Commands.DeleteJourney;
+﻿namespace Journey.Application.Journeys.Commands.DeleteJourney;
 
 public record DeleteJourneyCommand(Guid Id)
     : ICommand<DeleteJourneyResult>;

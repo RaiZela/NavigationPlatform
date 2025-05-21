@@ -1,7 +1,4 @@
-﻿
-using BuildingBlocks.Pagination;
-
-namespace Journey.Application.Journeys.Queries.GetJourneys;
+﻿namespace Journey.Application.Journeys.Queries.GetJourneys;
 
 public class GetJourneysHandler(IApplicationDbContext dbContext)
     : IQueryHandler<GetJourneysQuery, GetJourneysResult>

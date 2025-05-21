@@ -1,4 +1,4 @@
-﻿namespace Journey.Application.Data;
+﻿namespace Journey.Application.Data.Interfaces;
 
 public interface ICurrentUserService
 {

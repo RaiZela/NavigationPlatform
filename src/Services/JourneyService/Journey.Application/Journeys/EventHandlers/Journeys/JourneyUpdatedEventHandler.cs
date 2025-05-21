@@ -1,6 +1,4 @@
-﻿using MassTransit;
-
-namespace Journey.Application.Journeys.EventHandlers;
+﻿namespace Journey.Application.Journeys.EventHandlers.Journeys;
 
 public class JourneyUpdatedEventHandler(
     ILogger<JourneyUpdatedEventHandler> logger,

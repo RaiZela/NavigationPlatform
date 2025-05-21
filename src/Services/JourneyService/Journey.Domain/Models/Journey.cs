@@ -2,6 +2,9 @@
 
 public class Journey : Aggregate<Guid>
 {
+    private Journey()
+    { }
+
     public string StartLocation { get; private set; }
     public DateTime StartTime { get; private set; }
     public string ArrivalLocation { get; private set; }
@@ -9,7 +12,7 @@ public class Journey : Aggregate<Guid>
     public TransportType TransportType { get; private set; }
     public DistanceKM DistanceKm { get; private set; }
 
-    public Journey Create(
+    public static Journey Create(
         string startLocation,
         DateTime startTime,
         string arrivalLocation,
@@ -17,6 +20,13 @@ public class Journey : Aggregate<Guid>
         TransportType transportType,
         DistanceKM distanceKM)
     {
+
+        if (arrivalTime <= startTime)
+            throw new DomainException("Arrival time must be after start time.");
+
+        if (distanceKM.Value <= 0)
+            throw new DomainException("Distance must be greater than zero.");
+
         var journey = new Journey
         {
             StartLocation = startLocation,
@@ -49,8 +59,9 @@ public class Journey : Aggregate<Guid>
         AddDomainEvent(new JourneyUpdatedEvent(this));
     }
 
-    public void Delete(Guid Id)
+    public void Delete()
     {
-        AddDomainEvent(new JourneyDeletedEvent(Id));
+        AddDomainEvent(new JourneyDeletedEvent(this.Id));
     }
+
 }

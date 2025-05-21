@@ -1,5 +1,4 @@
-﻿
-namespace Journey.Infrastructure.Data.Auth;
+﻿namespace Journey.Application.Data.Services.Auth;
 
 public class CurrentUserService : ICurrentUserService
 {

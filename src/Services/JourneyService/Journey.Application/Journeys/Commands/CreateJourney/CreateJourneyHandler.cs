@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Journey.Domain.ValueObjects;
 
 namespace Journey.Application.Journeys.Commands.CreateJourney;
 
@@ -28,14 +28,13 @@ public class CreateJourneyHandler(IApplicationDbContext dbContext)
     private JourneyEntity CreateNewJourney(JourneyDto journeyDto)
     {
 
-        JourneyEntity newJourney = new JourneyEntity();
-        newJourney = newJourney.Create(
+        var newJourney = JourneyEntity.Create(
          journeyDto.StartLocation,
          journeyDto.StartTime,
-             journeyDto.ArrivalLocation,
-             journeyDto.ArrivalTime,
-             journeyDto.TransportType,
-             journeyDto.DistanceKm);
+         journeyDto.ArrivalLocation,
+         journeyDto.ArrivalTime,
+         (Domain.Enums.TransportType)journeyDto.TransportType,
+        DistanceKM.Of(journeyDto.DistanceKm));
 
         newJourney.Id = Guid.NewGuid();
 

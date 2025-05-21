@@ -1,6 +1,6 @@
 ﻿namespace Journey.API.Endpoints;
-public record GetJourneysByUserResponse(IEnumerable<JourneyDto> Journey);
 
+public record GetJourneysByUserResponse(IEnumerable<JourneyDto> Journey);
 public class GetJourneysByUser : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)

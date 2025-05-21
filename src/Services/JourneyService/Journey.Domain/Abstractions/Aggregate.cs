@@ -1,5 +1,4 @@
-﻿
-namespace Journey.Domain.Abstractions;
+﻿namespace Journey.Domain.Abstractions;
 
 public abstract class Aggregate<TId> : Entity<TId>, IAggregate<TId>
 {

@@ -7,6 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -14,9 +16,10 @@ builder.Services.AddMassTransit(busConfigurator =>
 {
     busConfigurator.SetKebabCaseEndpointNameFormatter();
 
-    busConfigurator.AddConsumer<JourneyCreatedConsumer>();
-    busConfigurator.AddConsumer<JourneyUpdatedConsumer>();
-    busConfigurator.AddConsumer<JourneySharedConsumer>();
+    busConfigurator.AddConsumers(typeof(Program).Assembly);
+    //busConfigurator.AddConsumer<JourneyCreatedConsumer>();
+    //busConfigurator.AddConsumer<JourneyUpdatedConsumer>();
+    //busConfigurator.AddConsumer<JourneySharedConsumer>();
 
     busConfigurator.UsingRabbitMq((context, configurator) =>
     {
@@ -25,17 +28,29 @@ builder.Services.AddMassTransit(busConfigurator =>
             h.Username(builder.Configuration["MessageBroker:Username"]);
             h.Password(builder.Configuration["MessageBroker:Password"]);
         });
-        configurator.ReceiveEndpoint("notification-service", e =>
+        //configurator.ReceiveEndpoint("notification-service", e =>
+        //{
+        //    e.ConfigureConsumer<JourneyCreatedConsumer>(context);
+        //    e.ConfigureConsumer<JourneyUpdatedConsumer>(context);
+        //    e.ConfigureConsumer<JourneySharedConsumer>(context);
+        //});
+        //configurator.ConfigureEndpoints(context);
+
+        configurator.ReceiveEndpoint("journey-created", e =>
         {
             e.ConfigureConsumer<JourneyCreatedConsumer>(context);
-            e.ConfigureConsumer<JourneyUpdatedConsumer>(context);
-            e.ConfigureConsumer<JourneySharedConsumer>(context);
         });
-        configurator.ConfigureEndpoints(context);
+
     });
 });
-
-builder.Services.AddMassTransitHostedService();
+builder.Services.AddHttpLogging(logging =>
+{
+    logging.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.All;
+    logging.RequestHeaders.Add("Authorization");
+    logging.ResponseHeaders.Add("Authorization");
+    logging.RequestHeaders.Add("X-Request-ID");
+    logging.ResponseHeaders.Add("X-Request-ID");
+});
 
 
 Log.Logger = new LoggerConfiguration()
@@ -64,9 +79,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//app.UseHttpsRedirection();
+app.UseSerilogRequestLogging();
+
+app.UseRouting();
 
 app.MapHub<NotificationHub>("/hub/notifications");
+
+app.UseHttpLogging();
 
 app.Run();
 
