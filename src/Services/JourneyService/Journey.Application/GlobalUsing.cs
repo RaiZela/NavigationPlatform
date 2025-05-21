@@ -24,5 +24,5 @@ global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Logging;
 global using System.Reflection;
-global using JourneyEntity = Journey.Domain.Models.Journey;
+global using JourneyEntity = Journey.Domain.Models.Journey.Journey;
 

@@ -1,4 +1,6 @@
-﻿namespace Journey.Infrastructure.Data.Configurations;
+﻿using Journey.Domain.Models.Journey;
+
+namespace Journey.Infrastructure.Configurations;
 
 public class SharedJourneyConfigurations : IEntityTypeConfiguration<SharedJourney>
 {

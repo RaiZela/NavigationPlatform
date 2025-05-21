@@ -1,4 +1,6 @@
-﻿namespace Journey.Infrastructure.Data.Configurations;
+﻿using Journey.Domain.Models.Journey;
+
+namespace Journey.Infrastructure.Configurations;
 
 public class FavouriteJourneyConfigurations : IEntityTypeConfiguration<FavoriteJourney>
 {
@@ -17,6 +19,11 @@ public class FavouriteJourneyConfigurations : IEntityTypeConfiguration<FavoriteJ
             .HasOne(fj => fj.User)
             .WithMany()
             .HasForeignKey(fj => fj.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(x => x.CreatedByUser)
+            .WithMany()
+            .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

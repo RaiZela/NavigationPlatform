@@ -1,4 +1,6 @@
-﻿namespace Journey.Application.Journeys.Commands.FavoriteJourneys.AddFavoriteJourney;
+﻿using Journey.Domain.Models.Journey;
+
+namespace Journey.Application.Journeys.Commands.FavoriteJourneys.AddFavoriteJourney;
 
 public record FavoritedJourneyHandler(IApplicationDbContext dbContext, ICurrentUserService CurrentUserService)
     : ICommandHandler<FavoritedJourneyCommand, AddFavoriteJourneyResult>

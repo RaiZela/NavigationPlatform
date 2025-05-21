@@ -1,11 +1,18 @@
-﻿namespace Journey.Domain.Models;
+﻿using Journey.Domain.Models.Auth;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Journey.Domain.Models.Journey;
 
 public class FavoriteJourney : Aggregate<Guid>
 {
     private FavoriteJourney()
     { }
+
+    [ForeignKey(nameof(Journey.Id))]
     public Guid JourneyId { get; set; }
     public Journey Journey { get; set; }
+
+    [ForeignKey(nameof(User.Id))]
     public Guid UserId { get; set; }
     public User User { get; set; }
 
@@ -24,6 +31,6 @@ public class FavoriteJourney : Aggregate<Guid>
 
     public void Remove()
     {
-        AddDomainEvent(new JourneyUnfavoritedEvent(this.Id));
+        AddDomainEvent(new JourneyUnfavoritedEvent(Id));
     }
 }

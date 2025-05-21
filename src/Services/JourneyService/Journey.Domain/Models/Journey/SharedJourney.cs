@@ -1,4 +1,6 @@
-﻿namespace Journey.Domain.Models;
+﻿using Journey.Domain.Models.Auth;
+
+namespace Journey.Domain.Models.Journey;
 
 public class SharedJourney
 {

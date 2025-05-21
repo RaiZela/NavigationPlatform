@@ -1,4 +1,7 @@
-﻿namespace Journey.Infrastructure.Data;
+﻿using Journey.Domain.Models.Auth;
+using Journey.Domain.Models.Journey;
+
+namespace Journey.Infrastructure.Data;
 
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {

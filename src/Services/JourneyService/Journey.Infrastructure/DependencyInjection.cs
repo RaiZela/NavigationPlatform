@@ -1,4 +1,6 @@
-﻿namespace Journey.Infrastructure;
+﻿using Journey.Infrastructure.Interceptors;
+
+namespace Journey.Infrastructure;
 
 public static class DependencyInjection
 {
@@ -9,6 +11,7 @@ public static class DependencyInjection
 
         services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
         services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
+        services.AddSingleton<ISaveChangesInterceptor, InsertOutboxMessagesInterceptor>();
 
         services.AddDbContext<ApplicationDbContext>((sp, options) =>
         {

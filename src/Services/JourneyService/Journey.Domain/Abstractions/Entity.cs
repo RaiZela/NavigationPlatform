@@ -1,4 +1,6 @@
-﻿namespace Journey.Domain.Abstractions;
+﻿using Journey.Domain.Models.Auth;
+
+namespace Journey.Domain.Abstractions;
 
 public abstract class Entity<T> : IEntity<T>
 {

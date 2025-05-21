@@ -5,7 +5,6 @@ namespace Journey.Application.Journeys.Commands.CreateJourney;
 public class CreateJourneyHandler(IApplicationDbContext dbContext)
     : ICommandHandler<CreateJourneyCommand, CreateJourneyResult>
 {
-    [Authorize]
     public async Task<CreateJourneyResult> Handle(CreateJourneyCommand command, CancellationToken cancellationToken)
     {
         try

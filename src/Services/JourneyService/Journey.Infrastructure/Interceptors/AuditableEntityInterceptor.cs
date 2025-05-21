@@ -1,6 +1,8 @@
-﻿namespace Journey.Infrastructure.Data.Interceptors;
+﻿using Journey.Domain.Models.Auth;
 
-public class AuditableEntityInterceptor : SaveChangesInterceptor
+namespace Journey.Infrastructure.Interceptors;
+
+internal sealed class AuditableEntityInterceptor : SaveChangesInterceptor
 {
     private readonly ICurrentUserService _currentUserService;
     private bool _isSavingChanges = false;  // To guard against recursive SaveChanges
@@ -75,7 +77,7 @@ public class AuditableEntityInterceptor : SaveChangesInterceptor
                     Email = _currentUserService.Email
 
                 };
-                context.Add<User>(user);
+                context.Add(user);
             }
 
             var userId = user.Id;

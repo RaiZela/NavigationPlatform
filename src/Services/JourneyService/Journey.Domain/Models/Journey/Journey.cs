@@ -1,4 +1,4 @@
-﻿namespace Journey.Domain.Models;
+﻿namespace Journey.Domain.Models.Journey;
 
 public class Journey : Aggregate<Guid>
 {
@@ -61,7 +61,7 @@ public class Journey : Aggregate<Guid>
 
     public void Delete()
     {
-        AddDomainEvent(new JourneyDeletedEvent(this.Id));
+        AddDomainEvent(new JourneyDeletedEvent(Id));
     }
 
 }

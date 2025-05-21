@@ -4,16 +4,19 @@ using Journey.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Journey.Infrastructure.Data.Migrations
+namespace Journey.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250521124218_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,31 @@ namespace Journey.Infrastructure.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Journey.Domain.Models.FavoriteJourney", b =>
+            modelBuilder.Entity("Journey.Domain.Models.Auth.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Username")
+                        .IsUnique();
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Journey.Domain.Models.Journey.FavoriteJourney", b =>
                 {
                     b.Property<Guid>("JourneyId")
                         .HasColumnType("uniqueidentifier");
@@ -30,19 +57,33 @@ namespace Journey.Infrastructure.Data.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("UserId1")
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("LastModifiedByUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("JourneyId", "UserId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("CreatedByUserId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("LastModifiedByUserId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("FavoriteJourneys");
                 });
 
-            modelBuilder.Entity("Journey.Domain.Models.Journey", b =>
+            modelBuilder.Entity("Journey.Domain.Models.Journey.Journey", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -95,7 +136,7 @@ namespace Journey.Infrastructure.Data.Migrations
                     b.ToTable("Journeys");
                 });
 
-            modelBuilder.Entity("Journey.Domain.Models.SharedJourney", b =>
+            modelBuilder.Entity("Journey.Domain.Models.Journey.SharedJourney", b =>
                 {
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("uniqueidentifier");
@@ -120,62 +161,78 @@ namespace Journey.Infrastructure.Data.Migrations
                     b.ToTable("SharedJourneys");
                 });
 
-            modelBuilder.Entity("Journey.Domain.Models.User", b =>
+            modelBuilder.Entity("Journey.Infrastructure.Outbox.OutboxMessage", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Role")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Username")
+                    b.Property<string>("Content")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Error")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ProcessedOnUtc")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Username")
-                        .IsUnique();
-
-                    b.ToTable("Users");
+                    b.ToTable("OutboxMessages", (string)null);
                 });
 
-            modelBuilder.Entity("Journey.Domain.Models.FavoriteJourney", b =>
+            modelBuilder.Entity("Journey.Domain.Models.Journey.FavoriteJourney", b =>
                 {
-                    b.HasOne("Journey.Domain.Models.Journey", "Journey")
+                    b.HasOne("Journey.Domain.Models.Auth.User", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Journey.Domain.Models.Journey.Journey", "Journey")
                         .WithMany()
                         .HasForeignKey("JourneyId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Journey.Domain.Models.User", "User")
+                    b.HasOne("Journey.Domain.Models.Auth.User", "LastModifiedByUser")
                         .WithMany()
+                        .HasForeignKey("LastModifiedByUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Journey.Domain.Models.Auth.User", "User")
+                        .WithMany("FavouriteJourneys")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Journey.Domain.Models.User", null)
-                        .WithMany("FavouriteJourneys")
-                        .HasForeignKey("UserId1");
+                    b.Navigation("CreatedByUser");
 
                     b.Navigation("Journey");
+
+                    b.Navigation("LastModifiedByUser");
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Journey.Domain.Models.Journey", b =>
+            modelBuilder.Entity("Journey.Domain.Models.Journey.Journey", b =>
                 {
-                    b.HasOne("Journey.Domain.Models.User", "CreatedByUser")
+                    b.HasOne("Journey.Domain.Models.Auth.User", "CreatedByUser")
                         .WithMany("CreatedJourneys")
                         .HasForeignKey("CreatedByUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Journey.Domain.Models.User", "LastModifiedByUser")
+                    b.HasOne("Journey.Domain.Models.Auth.User", "LastModifiedByUser")
                         .WithMany()
                         .HasForeignKey("LastModifiedByUserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -186,27 +243,27 @@ namespace Journey.Infrastructure.Data.Migrations
                     b.Navigation("LastModifiedByUser");
                 });
 
-            modelBuilder.Entity("Journey.Domain.Models.SharedJourney", b =>
+            modelBuilder.Entity("Journey.Domain.Models.Journey.SharedJourney", b =>
                 {
-                    b.HasOne("Journey.Domain.Models.Journey", "Journey")
+                    b.HasOne("Journey.Domain.Models.Journey.Journey", "Journey")
                         .WithMany()
                         .HasForeignKey("JourneyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Journey.Domain.Models.User", "Owner")
+                    b.HasOne("Journey.Domain.Models.Auth.User", "Owner")
                         .WithMany()
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Journey.Domain.Models.User", "SharedWIth")
+                    b.HasOne("Journey.Domain.Models.Auth.User", "SharedWIth")
                         .WithMany()
                         .HasForeignKey("SharedWIthId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Journey.Domain.Models.User", null)
+                    b.HasOne("Journey.Domain.Models.Auth.User", null)
                         .WithMany("SharedJourneys")
                         .HasForeignKey("UserId");
 
@@ -217,7 +274,7 @@ namespace Journey.Infrastructure.Data.Migrations
                     b.Navigation("SharedWIth");
                 });
 
-            modelBuilder.Entity("Journey.Domain.Models.User", b =>
+            modelBuilder.Entity("Journey.Domain.Models.Auth.User", b =>
                 {
                     b.Navigation("CreatedJourneys");
 
