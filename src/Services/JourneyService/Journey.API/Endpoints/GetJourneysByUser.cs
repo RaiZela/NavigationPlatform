@@ -10,10 +10,11 @@ public class GetJourneysByUser : ICarterModule
             var result = await sender.Send(new GetJourneysByUserQuery(userId));
             return Results.Ok(result);
         })
-            .WithName("GetJourneysByUser")
-.Produces<CreateJourneyResponse>(StatusCodes.Status201Created)
-.ProducesProblem(StatusCodes.Status400BadRequest)
-.WithSummary("Get Journeys by User")
-.WithDescription("Get Journeys by User");
+        .WithName("GetJourneysByUser")
+        .Produces<CreateJourneyResponse>(StatusCodes.Status201Created)
+        .ProducesProblem(StatusCodes.Status400BadRequest)
+        .WithSummary("Get Journeys by User")
+        .WithDescription("Get Journeys by User")
+        .RequireAuthorization("authenticated");
     }
 }

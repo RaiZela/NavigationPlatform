@@ -13,10 +13,11 @@ public class DeleteJourney : ICarterModule
 
             return Results.Ok(response);
         })
-            .WithName("DeleteJourney")
-.Produces<DeleteJourneyResponse>(StatusCodes.Status201Created)
-.ProducesProblem(StatusCodes.Status400BadRequest)
-.WithSummary("Delete Journey")
-.WithDescription("Delete Journey");
+        .WithName("DeleteJourney")
+        .Produces<DeleteJourneyResponse>(StatusCodes.Status201Created)
+        .ProducesProblem(StatusCodes.Status400BadRequest)
+        .WithSummary("Delete Journey")
+        .WithDescription("Delete Journey")
+        .RequireAuthorization("authenticated");
     }
 }

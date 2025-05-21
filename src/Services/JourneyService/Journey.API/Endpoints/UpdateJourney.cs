@@ -17,10 +17,11 @@ public class UpdateJourney : ICarterModule
             return Results.Ok(response);
 
         })
-            .WithName("UpdateJourney")
+        .WithName("UpdateJourney")
         .Produces<CreateJourneyResponse>(StatusCodes.Status201Created)
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .WithSummary("Update Journey")
-        .WithDescription("Update Journey");
+        .WithDescription("Update Journey")
+        .RequireAuthorization("authenticated");
     }
 }

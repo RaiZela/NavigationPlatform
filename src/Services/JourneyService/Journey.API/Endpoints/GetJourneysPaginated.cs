@@ -9,10 +9,11 @@ public class GetJourneysPaginated : ICarterModule
         {
 
         })
-            .WithName("Get Journeys Paginated")
-.Produces<CreateJourneyResponse>(StatusCodes.Status201Created)
-.ProducesProblem(StatusCodes.Status400BadRequest)
-.WithSummary("Get Paginated Journeys")
-.WithDescription("Get Paginated Journeys");
+        .WithName("Get Journeys Paginated")
+        .Produces<CreateJourneyResponse>(StatusCodes.Status201Created)
+        .ProducesProblem(StatusCodes.Status400BadRequest)
+        .WithSummary("Get Paginated Journeys")
+        .WithDescription("Get Paginated Journeys")
+        .RequireAuthorization("authenticated");
     }
 }
