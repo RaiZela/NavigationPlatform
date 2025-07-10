@@ -107,19 +107,6 @@ app.UseSerilogRequestLogging();
 
 app.UseRouting();
 
-//app.Use(async (context, next) =>
-//{
-//    var authHeader = context.Request.Headers["Authorization"].ToString();
-//    Console.WriteLine($"Authorization Header: {authHeader}");
-
-//    foreach (var header in context.Request.Headers)
-//    {
-//        Console.WriteLine($"{header.Key}: {header.Value}");
-//    }
-
-//    await next();
-//});
-
 
 app.UseAuthentication();
 
