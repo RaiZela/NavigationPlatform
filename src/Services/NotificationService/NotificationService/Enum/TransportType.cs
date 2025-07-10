@@ -2,6 +2,7 @@
 
 namespace NotificationService.Enum;
 
+//TODO ELEMINATE CODE MORE THAN ONCE
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum TransportType
 {

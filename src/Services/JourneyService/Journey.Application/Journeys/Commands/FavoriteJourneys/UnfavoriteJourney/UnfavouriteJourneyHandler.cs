@@ -1,11 +1,11 @@
 ﻿using Journey.Application.Journeys.Helpers;
 
-namespace Journey.Application.Journeys.Commands.FavoriteJourneys.AddFavoriteJourney;
+namespace Journey.Application.Journeys.Commands.FavoriteJourneys.UnfavoriteJourney;
 
-public record FavoritedJourneyHandler(IApplicationDbContext dbContext, ICurrentUserService CurrentUserService)
-    : ICommandHandler<FavoritedJourneyCommand, AddFavoriteJourneyResult>
+public record UnfavouriteJourneyHandler(IApplicationDbContext dbContext, ICurrentUserService CurrentUserService)
+    : ICommandHandler<UnfavouriteJourneyCommand, UnfavouriteJourneyResult>
 {
-    public async Task<AddFavoriteJourneyResult> Handle(FavoritedJourneyCommand command, CancellationToken cancellationToken)
+    public async Task<UnfavouriteJourneyResult> Handle(UnfavouriteJourneyCommand command, CancellationToken cancellationToken)
     {
         var userName = CurrentUserService.Username;
         var user = dbContext.Users.FirstOrDefault(x => x.Username == userName);
@@ -20,12 +20,13 @@ public record FavoritedJourneyHandler(IApplicationDbContext dbContext, ICurrentU
 
         var favoriteJourney = FavoriteJourneyHelper.CreateAsFavorite(user.Id, command.Id);
 
-        dbContext.FavoriteJourneys.Add(favoriteJourney);
+        dbContext.FavoriteJourneys.Remove(favoriteJourney);
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        return new AddFavoriteJourneyResult(true);
+        return new UnfavouriteJourneyResult(true);
     }
 
-
 }
+
+

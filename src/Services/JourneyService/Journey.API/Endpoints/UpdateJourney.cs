@@ -1,12 +1,12 @@
 ﻿namespace Journey.API.Endpoints;
 
-public record UpdateourneyRequest(JourneyDto Journey);
+public record UpdateJourneyRequest(JourneyDto Journey);
 public record UpdateJourneyResponse(bool isSuccess);
 public class UpdateJourney : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPut("/journeys", async (CreateJourneyRequest request, ISender sender) =>
+        app.MapPut("/journeys", async (UpdateJourneyRequest request, ISender sender) =>
         {
             var command = request.Adapt<UpdateJourneyCommand>();
 
