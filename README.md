@@ -95,30 +95,30 @@ Planned: Reward Worker to track total daily distance
 ## 📋 API Endpoints Summary
 
 Method	Endpoint	Description
-POST	/api/journeys	Create a journey
-GET	/api/journeys/{id}	Get journey by ID
-GET	/api/journeys?Page=1&PageSize=20	Paginated list
-PUT	/api/journeys/{id}	Update (owner only)
-DELETE	/api/journeys/{id}	Delete (owner only)
-POST	/api/journeys/{id}/favorite	Mark as favourite
-DELETE	/api/journeys/{id}/favorite	Remove from favourites
+- POST	/api/journeys	Create a journey
+- GET	/api/journeys/{id}	Get journey by ID
+- GET	/api/journeys?Page=1&PageSize=20	Paginated list
+- PUT	/api/journeys/{id}	Update (owner only)
+- DELETE	/api/journeys/{id}	Delete (owner only)
+- POST	/api/journeys/{id}/favorite	Mark as favourite
+- DELETE	/api/journeys/{id}/favorite	Remove from favourites
 
 More (e.g., sharing, logout, admin, notifications) in progress.
 
 ## 🌐 Authentication
 
-Keycloak using Authorization Code Flow with PKCE
-Access and refresh tokens stored securely (planned via HTTP-only cookies)
-401 on unauthorized access; refresh token support to be added
-Admin routes require Admin scope
+- Keycloak using Authorization Code Flow with PKCE
+- Access and refresh tokens stored securely (planned via HTTP-only cookies)
+- 401 on unauthorized access; refresh token support to be added
+- Admin routes require Admin scope
 
 ## 🛠 Observability (Planned)
 
-Serilog structured logs with correlation ID propagation
-Health checks: /healthz, /readyz
-OpenTelemetry + Jaeger tracing
-Prometheus metrics: HTTP latency, DB latency, queue lag
-Alert rule: queue lag > 100 msgs for 5 min
+- Serilog structured logs with correlation ID propagation
+- Health checks: /healthz, /readyz
+- OpenTelemetry + Jaeger tracing
+- Prometheus metrics: HTTP latency, DB latency, queue lag
+- Alert rule: queue lag > 100 msgs for 5 min
 
 ## ⚙️ CI/CD Pipeline (Planned)
 
@@ -137,25 +137,27 @@ Shows services: API Gateway → Journey Service → RabbitMQ → Reward Worker /
 
 ## ⚖️ Design Decisions
 
-Clean separation of concerns (Clean Architecture)
-CQRS for scalability and clear read/write logic
-Asynchronous domain & integration events
-Stateless microservices, scalable horizontally
-Easy local setup with Docker Compose
-Real-time and email-based notifications planned
+- Clean separation of concerns (Clean Architecture)
+- CQRS for scalability and clear read/write logic
+- Asynchronous domain & integration events
+- Stateless microservices, scalable horizontally
+- Easy local setup with Docker Compose
+- Real-time and email-based notifications planned
 
 ## 🚀 Scaling & Production Strategy
 
-Stateless services allow horizontal scaling
-RabbitMQ decouples message producers and consumers
-Per-microservice databases ensure bounded contexts
-Propagate correlation/trace IDs across services
-Static front-end served via API or NGINX container
+- Stateless services allow horizontal scaling
+- RabbitMQ decouples message producers and consumers
+- Per-microservice databases ensure bounded contexts
+- Propagate correlation/trace IDs across services
+- Static front-end served via API or NGINX container
 
 ## 📌 Notes
 
 This project is a work in progress. Missing features are clearly scoped and planned.
+
 Front-end and admin tooling are yet to be integrated.
+
 Daily badge and sharing logic will be implemented as a next priority.
 
 📎 License
