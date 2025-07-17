@@ -130,11 +130,6 @@ GitHub Actions
 ⏳ Docker image build and push (tagged with commit SHA)
 ⏳ Integration tests with full stack up
 
-## 🗺 Architecture Diagram
-
-(Insert PNG/SVG here once generated)
-Shows services: API Gateway → Journey Service → RabbitMQ → Reward Worker / Notification Service → Database / SignalR.
-
 ## ⚖️ Design Decisions
 
 - Clean separation of concerns (Clean Architecture)
@@ -161,4 +156,5 @@ Front-end and admin tooling are yet to be integrated.
 Daily badge and sharing logic will be implemented as a next priority.
 
 📎 License
+
 MIT or specify your licensing model here.
