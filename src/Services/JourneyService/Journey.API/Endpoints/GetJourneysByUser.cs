@@ -8,7 +8,7 @@ public class GetJourneysByUser : ICarterModule
         app.MapGet("/journeys/journeys-by-user/{userId}", async (Guid userId, ISender sender) =>
         {
             var result = await sender.Send(new GetJourneysByUserQuery(userId));
-            return Results.Ok(result);
+            return Results.Ok(result.Adapt<GetJourneysByUserResponse>());
         })
         .WithName("GetJourneysByUser")
         .Produces<CreateJourneyResponse>(StatusCodes.Status201Created)

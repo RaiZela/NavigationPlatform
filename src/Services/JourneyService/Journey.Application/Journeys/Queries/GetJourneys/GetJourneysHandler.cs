@@ -15,11 +15,15 @@ public class GetJourneysHandler(IApplicationDbContext dbContext)
             .Take(pageSize)
             .ToListAsync(cancellationToken);
 
+        var config = new TypeAdapterConfig();
+        config.NewConfig<JourneyEntity, JourneyDto>()
+            .Map(dest => dest.DistanceKm, src => src.DistanceKm.Value);
+
         return new GetJourneysResult(
             new PaginatedResult<JourneyDto>(
                 pageIndex,
                 pageSize,
                 totalCount,
-                journeys.Adapt<IEnumerable<JourneyDto>>()));
+                journeys.Adapt<IEnumerable<JourneyDto>>(config)));
     }
 }

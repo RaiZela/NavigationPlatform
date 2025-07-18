@@ -10,14 +10,13 @@ public class FavoriteJourney : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("/journeys/favorite", async (FavoriteJourneyRequest request, ISender sender) =>
+        app.MapPost("/journeys/favorite/{id}", async (Guid id, ISender sender) =>
         {
-            if (request.JourneyId == Guid.Empty)
+            if (id == Guid.Empty)
             {
                 return Results.BadRequest("JourneyId is empty");
             }
-            var command = request.Adapt<FavoritedJourneyCommand>();
-            var result = await sender.Send(command);
+            var result = await sender.Send(new FavoritedJourneyCommand(id));
             var response = result.Adapt<FavoriteJourneyResponse>();
             return Results.Ok(response);
         })

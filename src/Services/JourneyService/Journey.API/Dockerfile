@@ -32,3 +32,8 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Journey.API.dll"]
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS watch
+WORKDIR /src
+COPY . /src
+ENTRYPOINT ["dotnet", "watch", "run", "--urls", "http://0.0.0.0:5000"]

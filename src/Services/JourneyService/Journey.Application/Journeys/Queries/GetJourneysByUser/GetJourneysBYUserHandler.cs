@@ -11,8 +11,10 @@ public class GetJourneysByUserHandler(IApplicationDbContext dbContext)
             .OrderBy(x => x.CreatedAt)
             .ToListAsync(cancellationToken);
 
-
-        List<JourneyDto> journeyDtos = journeys.Adapt<List<JourneyDto>>();
+        var config = new TypeAdapterConfig();
+        config.NewConfig<JourneyEntity, JourneyDto>()
+            .Map(dest => dest.DistanceKm, src => src.DistanceKm.Value);
+        List<JourneyDto> journeyDtos = journeys.Adapt<List<JourneyDto>>(config);
 
         return new GetJourneysByUserResult(journeyDtos);
     }

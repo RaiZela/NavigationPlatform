@@ -12,16 +12,16 @@ public class FavoriteJourney : Aggregate<Guid>
     public Guid JourneyId { get; set; }
     public Journey Journey { get; set; }
 
-    [ForeignKey(nameof(User.Id))]
-    public Guid UserId { get; set; }
-    public User User { get; set; }
+    [ForeignKey(nameof(ActionUser.Id))]
+    public Guid ActionUserId { get; set; }
+    public User ActionUser { get; set; } //The user that favorited it
 
 
     public static FavoriteJourney Create(Guid userId, Guid journeyId)
     {
         var favorite = new FavoriteJourney
         {
-            UserId = userId,
+            ActionUserId = userId,
             JourneyId = journeyId
         };
 

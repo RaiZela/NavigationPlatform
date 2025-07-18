@@ -10,7 +10,7 @@ public class User
     public string Username { get; set; }
     public virtual ICollection<JourneyEntity> CreatedJourneys { get; set; }
 
-    [InverseProperty(nameof(FavoriteJourney.User))]
+    [InverseProperty(nameof(FavoriteJourney.ActionUser))]
     public virtual ICollection<FavoriteJourney> FavouriteJourneys { get; set; }
     public virtual ICollection<SharedJourney> SharedJourneys { get; set; }
 }

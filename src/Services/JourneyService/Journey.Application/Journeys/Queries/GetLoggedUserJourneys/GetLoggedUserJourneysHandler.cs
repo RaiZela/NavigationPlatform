@@ -18,8 +18,11 @@ public class GetLoggedUserJourneysHandler(IApplicationDbContext dbContext, ICurr
             .OrderBy(x => x.CreatedAt)
             .ToListAsync(cancellationToken);
 
+        var config = new TypeAdapterConfig();
+        config.NewConfig<JourneyEntity, JourneyDto>()
+            .Map(dest => dest.DistanceKm, src => src.DistanceKm.Value);
 
-        List<JourneyDto> journeyDtos = journeys.Adapt<List<JourneyDto>>(); ;
+        List<JourneyDto> journeyDtos = journeys.Adapt<List<JourneyDto>>(config);
 
         return new GetLoggedUserJourneysResult(journeyDtos);
     }

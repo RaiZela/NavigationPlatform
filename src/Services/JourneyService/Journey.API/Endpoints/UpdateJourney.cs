@@ -18,7 +18,7 @@ public class UpdateJourney : ICarterModule
 
         })
         .WithName("UpdateJourney")
-        .Produces<CreateJourneyResponse>(StatusCodes.Status201Created)
+        .Produces<UpdateJourneyResponse>(StatusCodes.Status201Created)
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .WithSummary("Update Journey")
         .WithDescription("Update Journey")

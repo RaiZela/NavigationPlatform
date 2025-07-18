@@ -1,7 +1,7 @@
 ﻿
 namespace Journey.API.Endpoints;
 
-public record GetLoggedUserJourneysResponse(IEnumerable<JourneyDto> Journey);
+public record GetLoggedUserJourneysResponse(IEnumerable<JourneyDto> Journeys);
 public class GetLoggedUserJourneys : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
@@ -9,7 +9,8 @@ public class GetLoggedUserJourneys : ICarterModule
         app.MapGet("/journeys/journeys-by-logged-user", async (ISender sender) =>
         {
             var result = await sender.Send(new GetLoggedUserJourneysQuery());
-            return Results.Ok(result);
+            var test = result.Adapt<GetLoggedUserJourneysResponse>();
+            return Results.Ok(test);
         })
         .WithName("GetJourneysByLoggedUser")
         .Produces<IEnumerable<GetJourneysByUserResponse>>(StatusCodes.Status201Created)

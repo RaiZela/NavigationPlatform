@@ -13,12 +13,15 @@ public class GetFavouriteJourneysHandler(IApplicationDbContext dbContext, ICurre
 
         var favouriteJourneys = await dbContext.FavoriteJourneys
              .AsNoTracking()
-             .Where(x => x.UserId == user.Id)
+             .Where(x => x.ActionUserId == user.Id)
              .Select(x => x.Journey)
              .OrderBy(x => x.CreatedAt)
              .ToListAsync(cancellationToken);
+        var config = new TypeAdapterConfig();
+        config.NewConfig<JourneyEntity, JourneyDto>()
+            .Map(dest => dest.DistanceKm, src => src.DistanceKm.Value);
 
-        List<JourneyDto> journeyDtos = favouriteJourneys.Adapt<List<JourneyDto>>();
+        List<JourneyDto> journeyDtos = favouriteJourneys.Adapt<List<JourneyDto>>(config);
 
         return new GetFavouriteJourneysResult(journeyDtos);
     }

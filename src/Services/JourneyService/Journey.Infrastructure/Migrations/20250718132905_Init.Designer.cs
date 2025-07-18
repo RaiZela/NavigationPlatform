@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Journey.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250521124218_Init")]
+    [Migration("20250718132905_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -54,7 +54,7 @@ namespace Journey.Infrastructure.Migrations
                     b.Property<Guid>("JourneyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("ActionUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -72,13 +72,13 @@ namespace Journey.Infrastructure.Migrations
                     b.Property<Guid>("LastModifiedByUserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("JourneyId", "UserId");
+                    b.HasKey("JourneyId", "ActionUserId");
+
+                    b.HasIndex("ActionUserId");
 
                     b.HasIndex("CreatedByUserId");
 
                     b.HasIndex("LastModifiedByUserId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("FavoriteJourneys");
                 });
@@ -191,6 +191,12 @@ namespace Journey.Infrastructure.Migrations
 
             modelBuilder.Entity("Journey.Domain.Models.Journey.FavoriteJourney", b =>
                 {
+                    b.HasOne("Journey.Domain.Models.Auth.User", "ActionUser")
+                        .WithMany("FavouriteJourneys")
+                        .HasForeignKey("ActionUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Journey.Domain.Models.Auth.User", "CreatedByUser")
                         .WithMany()
                         .HasForeignKey("CreatedByUserId")
@@ -206,22 +212,16 @@ namespace Journey.Infrastructure.Migrations
                     b.HasOne("Journey.Domain.Models.Auth.User", "LastModifiedByUser")
                         .WithMany()
                         .HasForeignKey("LastModifiedByUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Journey.Domain.Models.Auth.User", "User")
-                        .WithMany("FavouriteJourneys")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                    b.Navigation("ActionUser");
 
                     b.Navigation("CreatedByUser");
 
                     b.Navigation("Journey");
 
                     b.Navigation("LastModifiedByUser");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Journey.Domain.Models.Journey.Journey", b =>

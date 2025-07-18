@@ -7,7 +7,7 @@ public class FavouriteJourneyConfigurations : IEntityTypeConfiguration<FavoriteJ
     public void Configure(EntityTypeBuilder<FavoriteJourney> builder)
     {
         builder
-      .HasKey(fj => new { fj.JourneyId, fj.UserId });
+      .HasKey(fj => new { fj.JourneyId, fj.ActionUserId });
 
         builder
             .HasOne(fj => fj.Journey)
@@ -16,14 +16,20 @@ public class FavouriteJourneyConfigurations : IEntityTypeConfiguration<FavoriteJ
         .OnDelete(DeleteBehavior.Restrict);
 
         builder
-            .HasOne(fj => fj.User)
+            .HasOne(fj => fj.ActionUser)
             .WithMany()
-            .HasForeignKey(fj => fj.UserId)
+            .HasForeignKey(fj => fj.ActionUserId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(x => x.CreatedByUser)
             .WithMany()
-            .HasForeignKey(x => x.UserId)
+            .HasForeignKey(x => x.ActionUserId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder
+            .HasOne(fj => fj.LastModifiedByUser)
+            .WithMany()
+            .HasForeignKey(fj => fj.LastModifiedByUserId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

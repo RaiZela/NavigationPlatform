@@ -2,15 +2,14 @@
 
 namespace Journey.API.Endpoints;
 
-public record UnfavoriteJourneyRequest(Guid id);
 public record UnfavoriteJourneyResponse(bool isSuccess);
 public class RemoveFromFavorites : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapDelete("/journeys", async (UnfavoriteJourneyRequest request, ISender sender) =>
+        app.MapDelete("/journeys/{id}", async (Guid id, ISender sender) =>
         {
-            var command = new UnfavouriteJourneyCommand(request.id);
+            var command = new UnfavouriteJourneyCommand(id);
             var result = await sender.Send(command);
             var response = new UnfavoriteJourneyResponse(result.IsSuccess);
             return Results.Ok(response);

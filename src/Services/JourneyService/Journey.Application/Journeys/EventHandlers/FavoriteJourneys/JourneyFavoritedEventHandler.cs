@@ -12,7 +12,7 @@ public class JourneyFavoritedEventHandler(
         {
             var model = new FavoriteJourneyEventModel
             {
-                Username = notification.journey.User.Username,
+                Username = notification.journey.ActionUser.Username,
                 ArrivalLocation = notification.journey.Journey.ArrivalLocation,
                 CreatedByUser = notification.journey.Journey.CreatedByUser.Username
             };

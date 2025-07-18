@@ -79,7 +79,7 @@ namespace Journey.Infrastructure.Migrations
                 columns: table => new
                 {
                     JourneyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ActionUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedByUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -88,11 +88,17 @@ namespace Journey.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FavoriteJourneys", x => new { x.JourneyId, x.UserId });
+                    table.PrimaryKey("PK_FavoriteJourneys", x => new { x.JourneyId, x.ActionUserId });
                     table.ForeignKey(
                         name: "FK_FavoriteJourneys_Journeys_JourneyId",
                         column: x => x.JourneyId,
                         principalTable: "Journeys",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_FavoriteJourneys_Users_ActionUserId",
+                        column: x => x.ActionUserId,
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -105,14 +111,7 @@ namespace Journey.Infrastructure.Migrations
                         name: "FK_FavoriteJourneys_Users_LastModifiedByUserId",
                         column: x => x.LastModifiedByUserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_FavoriteJourneys_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -153,6 +152,11 @@ namespace Journey.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_FavoriteJourneys_ActionUserId",
+                table: "FavoriteJourneys",
+                column: "ActionUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_FavoriteJourneys_CreatedByUserId",
                 table: "FavoriteJourneys",
                 column: "CreatedByUserId");
@@ -161,11 +165,6 @@ namespace Journey.Infrastructure.Migrations
                 name: "IX_FavoriteJourneys_LastModifiedByUserId",
                 table: "FavoriteJourneys",
                 column: "LastModifiedByUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_FavoriteJourneys_UserId",
-                table: "FavoriteJourneys",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Journeys_ArrivalLocation",

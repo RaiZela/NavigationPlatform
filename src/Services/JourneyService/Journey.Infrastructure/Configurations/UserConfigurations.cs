@@ -11,8 +11,8 @@ public class UserConfigurations : IEntityTypeConfiguration<User>
         builder.HasIndex(u => u.Username).IsUnique();
 
         builder.HasMany(x => x.FavouriteJourneys)
-            .WithOne(x => x.User)
-            .HasForeignKey(x => x.UserId)
+            .WithOne(x => x.ActionUser)
+            .HasForeignKey(x => x.ActionUserId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 

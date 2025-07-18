@@ -1,4 +1,6 @@
-﻿namespace Journey.API.Endpoints;
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace Journey.API.Endpoints;
 
 public record CreateJourneyRequest(JourneyDto Journey);
 public record CreateJourneyResponse(Guid Id);
@@ -8,7 +10,7 @@ public class CreateJourney : ICarterModule
     public void AddRoutes(IEndpointRouteBuilder app)
     {
 
-        app.MapPost("/journeys", async (CreateJourneyRequest request, ISender sender) =>
+        app.MapPost("/journeys", async ([FromBody] CreateJourneyRequest request, ISender sender) =>
         {
             if (request.Journey == null)
             {

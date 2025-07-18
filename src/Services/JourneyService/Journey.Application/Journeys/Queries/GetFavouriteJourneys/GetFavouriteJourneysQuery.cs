@@ -1,6 +1,6 @@
 ﻿namespace Journey.Application.Journeys.Queries.GetFavouriteJourneys;
 
-public record GetFavouriteJourneysQuery(4)
+public record GetFavouriteJourneysQuery(Guid userId)
     : IQuery<GetFavouriteJourneysResult>;
 
 

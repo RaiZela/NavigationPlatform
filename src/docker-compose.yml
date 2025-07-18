@@ -18,6 +18,9 @@ services:
     ports:
       - "5100:5100"
       - "5002:5002"
+    volumes:
+      - ./Services/JourneyService/Journey.API:/app
+    command: dotnet watch run --no-launch-profile
     networks:
       - backend
     environment:
@@ -25,6 +28,7 @@ services:
       - ConnectionStrings__DefaultConnection=Data Source=sqlserver;Database=JourneyDb;User=sa;Password=Your_password123!;Encrypt=False;TrustServerCertificate=True;
     depends_on:
       - sqlserver
+
 
   notificationservice:
     image: ${DOCKER_REGISTRY-}notificationservice
