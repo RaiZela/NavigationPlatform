@@ -1,6 +1,4 @@
-﻿using Journey.Application.Journeys.Helpers;
-
-namespace Journey.Application.Journeys.Commands.FavoriteJourneys.UnfavoriteJourney;
+﻿namespace Journey.Application.Journeys.Commands.FavoriteJourneys.UnfavoriteJourney;
 
 public record UnfavouriteJourneyHandler(IApplicationDbContext dbContext, ICurrentUserService CurrentUserService)
     : ICommandHandler<UnfavouriteJourneyCommand, UnfavouriteJourneyResult>
@@ -18,13 +16,15 @@ public record UnfavouriteJourneyHandler(IApplicationDbContext dbContext, ICurren
         if (journey is null)
             throw new JourneyNotFoundException(command.Id);
 
-        var favoriteJourney = FavoriteJourneyHelper.CreateAsFavorite(user.Id, command.Id);
+        var favoriteJourney = await dbContext.FavoriteJourneys.Where(x => x.CreatedByUserId == user.Id && x.JourneyId == command.Id).FirstOrDefaultAsync();
+        if (favoriteJourney is null)
+            return new UnfavouriteJourneyResult(false, "Journey is not favorited");
 
         dbContext.FavoriteJourneys.Remove(favoriteJourney);
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        return new UnfavouriteJourneyResult(true);
+        return new UnfavouriteJourneyResult(true, "Journey removed from favorites!");
     }
 
 }

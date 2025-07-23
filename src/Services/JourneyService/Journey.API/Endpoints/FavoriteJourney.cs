@@ -4,7 +4,7 @@ namespace Journey.API.Endpoints;
 
 public record FavoriteJourneyRequest(Guid JourneyId);
 
-public record FavoriteJourneyResponse(bool IsSuccess);
+public record FavoriteJourneyResponse(bool IsSuccess, string message);
 
 public class FavoriteJourney : ICarterModule
 {
@@ -17,7 +17,7 @@ public class FavoriteJourney : ICarterModule
                 return Results.BadRequest("JourneyId is empty");
             }
             var result = await sender.Send(new FavoritedJourneyCommand(id));
-            var response = result.Adapt<FavoriteJourneyResponse>();
+            var response = new FavoriteJourneyResponse(result.isSuccess, result.message);
             return Results.Ok(response);
         })
         .WithName("FavoriteJourney")

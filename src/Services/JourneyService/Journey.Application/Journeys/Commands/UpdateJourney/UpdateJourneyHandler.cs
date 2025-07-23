@@ -36,7 +36,8 @@ public class UpdateJourneyHandler(IApplicationDbContext dbContext, ICurrentUserS
             journeyDto.ArrivalLocation,
             journeyDto.ArrivalTime,
             (Domain.Enums.TransportType)journeyDto.TransportType,
-           DistanceKM.Of(journeyDto.DistanceKm));
+           DistanceKM.Of(journeyDto.DistanceKm),
+           journey.CreatedByUserId);
     }
 }
 

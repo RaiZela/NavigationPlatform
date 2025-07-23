@@ -10,10 +10,10 @@ public abstract class Entity<T> : IEntity<T>
 
     [ForeignKey(nameof(CreatedByUser.Id))]
     public Guid CreatedByUserId { get; set; }
-    public User CreatedByUser { get; set; }
+    public virtual User CreatedByUser { get; set; }
     public DateTime? LastModified { get; set; }
 
     [ForeignKey(nameof(LastModifiedByUser.Id))]
     public Guid LastModifiedByUserId { get; set; }
-    public User LastModifiedByUser { get; set; }
+    public virtual User LastModifiedByUser { get; set; }
 }

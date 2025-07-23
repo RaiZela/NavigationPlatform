@@ -1,7 +1,7 @@
 ﻿namespace Journey.Application.Journeys.Commands.FavoriteJourneys.UnfavoriteJourney;
 
 public record UnfavouriteJourneyCommand(Guid Id) : ICommand<UnfavouriteJourneyResult>;
-public record UnfavouriteJourneyResult(bool IsSuccess);
+public record UnfavouriteJourneyResult(bool IsSuccess, string? message);
 public class RemoveFavoriteJourneyCommandValidator : AbstractValidator<UnfavouriteJourneyCommand>
 {
     public RemoveFavoriteJourneyCommandValidator()

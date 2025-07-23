@@ -4,6 +4,7 @@ using Journey.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Journey.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250722111843_LastModifiedJourneys")]
+    partial class LastModifiedJourneys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -224,13 +227,13 @@ namespace Journey.Infrastructure.Migrations
             modelBuilder.Entity("Journey.Domain.Models.Journey.Journey", b =>
                 {
                     b.HasOne("Journey.Domain.Models.Auth.User", "CreatedByUser")
-                        .WithMany()
+                        .WithMany("CreatedJourneys")
                         .HasForeignKey("CreatedByUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Journey.Domain.Models.Auth.User", "LastModifiedByUser")
-                        .WithMany()
+                        .WithMany("LastModifiedJourneys")
                         .HasForeignKey("LastModifiedByUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -273,7 +276,11 @@ namespace Journey.Infrastructure.Migrations
 
             modelBuilder.Entity("Journey.Domain.Models.Auth.User", b =>
                 {
+                    b.Navigation("CreatedJourneys");
+
                     b.Navigation("FavouriteJourneys");
+
+                    b.Navigation("LastModifiedJourneys");
 
                     b.Navigation("SharedJourneys");
                 });

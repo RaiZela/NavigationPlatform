@@ -20,11 +20,16 @@ public record FavoritedJourneyHandler(IApplicationDbContext dbContext, ICurrentU
 
         var favoriteJourney = FavoriteJourneyHelper.CreateAsFavorite(user.Id, command.Id);
 
+        var existing = await dbContext.FavoriteJourneys.Where(x => x.ActionUserId == user.Id && x.JourneyId == command.Id).ToListAsync();
+
+        if (existing.Any())
+            return new AddFavoriteJourneyResult(false, "This is already favorited!");
+
         dbContext.FavoriteJourneys.Add(favoriteJourney);
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        return new AddFavoriteJourneyResult(true);
+        return new AddFavoriteJourneyResult(true, "Journey added to favorites!");
     }
 
 

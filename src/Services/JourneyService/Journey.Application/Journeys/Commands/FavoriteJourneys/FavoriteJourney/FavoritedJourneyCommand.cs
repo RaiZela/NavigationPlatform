@@ -2,7 +2,7 @@
 
 public record FavoritedJourneyCommand(Guid Id) : ICommand<AddFavoriteJourneyResult>;
 
-public record AddFavoriteJourneyResult(bool isSuccess);
+public record AddFavoriteJourneyResult(bool isSuccess, string? message = "");
 
 public class AddFavoriteJourneyCommandValidator : AbstractValidator<FavoritedJourneyCommand>
 {

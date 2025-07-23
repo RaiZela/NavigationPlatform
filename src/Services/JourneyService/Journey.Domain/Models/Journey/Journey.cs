@@ -4,7 +4,6 @@ public class Journey : Aggregate<Guid>
 {
     private Journey()
     { }
-
     public string StartLocation { get; private set; }
     public DateTime StartTime { get; private set; }
     public string ArrivalLocation { get; private set; }
@@ -47,7 +46,8 @@ public class Journey : Aggregate<Guid>
       string arrivalLocation,
       DateTime arrivalTime,
       TransportType transportType,
-      DistanceKM distanceKM)
+      DistanceKM distanceKM,
+      Guid createdByUserId)
     {
         StartLocation = startLocation;
         StartTime = startTime;
@@ -55,6 +55,7 @@ public class Journey : Aggregate<Guid>
         ArrivalTime = arrivalTime;
         TransportType = transportType;
         DistanceKm = distanceKM;
+        CreatedByUserId = createdByUserId;
 
         AddDomainEvent(new JourneyUpdatedEvent(this));
     }

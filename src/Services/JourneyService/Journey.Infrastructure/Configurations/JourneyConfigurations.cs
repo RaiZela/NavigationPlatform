@@ -20,10 +20,17 @@ public class JourneyConfigurations : IEntityTypeConfiguration<JourneyEntity>
                  .HasPrecision(5, 2)
                  .HasColumnName("DistanceKm");
 
-        builder.HasOne(j => j.CreatedByUser)
-   .WithMany(u => u.CreatedJourneys)
-   .HasForeignKey(j => j.CreatedByUserId)
-   .OnDelete(DeleteBehavior.Restrict);
+        builder
+            .HasOne(sj => sj.CreatedByUser)
+            .WithMany()
+            .HasForeignKey(sj => sj.CreatedByUserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder
+            .HasOne(sj => sj.LastModifiedByUser)
+            .WithMany()
+            .HasForeignKey(sj => sj.LastModifiedByUserId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 
 
@@ -48,6 +55,8 @@ public class JourneyConfigurations : IEntityTypeConfiguration<JourneyEntity>
             .HasOne(sj => sj.Journey)
             .WithMany()
             .HasForeignKey(sj => sj.JourneyId);
-    }
 
+
+
+    }
 }

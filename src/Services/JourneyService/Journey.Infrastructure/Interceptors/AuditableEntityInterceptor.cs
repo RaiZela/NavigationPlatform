@@ -88,9 +88,12 @@ internal sealed class AuditableEntityInterceptor : SaveChangesInterceptor
                 {
                     entry.Entity.CreatedByUserId = userId;
                     entry.Entity.CreatedAt = DateTime.UtcNow;
+
+                    entry.Entity.LastModifiedByUserId = userId;
+                    entry.Entity.LastModified = DateTime.UtcNow;
                 }
 
-                if (entry.State == EntityState.Added || entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
+                if (entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
                 {
                     entry.Entity.LastModifiedByUserId = userId;
                     entry.Entity.LastModified = DateTime.UtcNow;

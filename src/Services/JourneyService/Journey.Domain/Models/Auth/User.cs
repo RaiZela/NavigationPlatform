@@ -8,9 +8,9 @@ public class User
     public string? Email { get; set; }
     public string? Role { get; set; }
     public string Username { get; set; }
-    public virtual ICollection<JourneyEntity> CreatedJourneys { get; set; }
 
     [InverseProperty(nameof(FavoriteJourney.ActionUser))]
     public virtual ICollection<FavoriteJourney> FavouriteJourneys { get; set; }
     public virtual ICollection<SharedJourney> SharedJourneys { get; set; }
+
 }

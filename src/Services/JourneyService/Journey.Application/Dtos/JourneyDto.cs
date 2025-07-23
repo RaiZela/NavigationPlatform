@@ -8,4 +8,5 @@ public record JourneyDto(
             string ArrivalLocation,
             DateTime ArrivalTime,
             TransportType TransportType,
-            decimal DistanceKm);
+            decimal DistanceKm,
+            Guid CreatedByUserId);
