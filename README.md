@@ -95,15 +95,16 @@ Planned: Reward Worker to track total daily distance
 ## 📋 API Endpoints Summary
 
 Method	Endpoint	Description
-- POST	/api/journeys	Create a journey
-- GET	/api/journeys/{id}	Get journey by ID
-- GET	/api/journeys?Page=1&PageSize=20	Paginated list
-- PUT	/api/journeys/{id}	Update (owner only)
-- DELETE	/api/journeys/{id}	Delete (owner only)
-- POST	/api/journeys/{id}/favorite	Mark as favourite
-- DELETE	/api/journeys/{id}/favorite	Remove from favourites
+- POST	/journeys	Create a journey
+- PUT	/journeys	Update 
+- DELETE	/journeys/{id}	Delete 
+- POST	/journeys/favorite/{id}	Mark as favourite
+- DELETE	/journeys/remove-from-favorites/{id}	Remove from favourites
+- GET /journeys/favorite-journeys/{userId} Get favorite journeys by user Id
+- GET /journeys/journeys-by-user/{userId} Get users journeys
+- GET /journeys/journeys-by-logged-user Get journeys of the logged user
 
-More (e.g., sharing, logout, admin, notifications) in progress.
+More (e.g., sharing, logout, admin, notifications, pagination) in progress.
 
 ## 🌐 Authentication
 
