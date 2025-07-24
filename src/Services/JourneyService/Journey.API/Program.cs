@@ -1,3 +1,5 @@
+using Journey.Application.Helpers;
+
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -7,6 +9,8 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddHostedService<OutboxBackgroundService>();
 
 builder.Services.AddMassTransit(busConfigurator =>
 {
