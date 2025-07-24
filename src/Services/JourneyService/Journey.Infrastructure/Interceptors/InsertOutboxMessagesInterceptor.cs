@@ -1,4 +1,6 @@
-﻿namespace Journey.Infrastructure.Interceptors;
+﻿using Journey.Domain.Outbox;
+
+namespace Journey.Infrastructure.Interceptors;
 
 internal sealed class InsertOutboxMessagesInterceptor : SaveChangesInterceptor
 {
