@@ -1,6 +1,6 @@
-﻿namespace Journey.Infrastructure.Outbox;
+﻿namespace Journey.Domain.Outbox;
 
-internal sealed record OutboxMessage(
+public sealed record OutboxMessage(
        Guid Id,
         string Name,
         string Content,
